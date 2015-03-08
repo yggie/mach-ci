@@ -84,7 +84,9 @@
 
     "predef": [
       "require",
-      "THREE"
+      "THREE",
+      "module",
+      "expect"
     ],
 
     // Custom Globals

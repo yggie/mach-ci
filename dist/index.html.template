@@ -10,8 +10,6 @@
 
   <script id="logs" type="text/logs"><!-- LOGS_PLACEHOLDER --></script>
 
-  <script src="libraries.min.js"></script>
-
   <script src="app.min.js"></script>
 </body>
 </html>

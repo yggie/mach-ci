@@ -1,0 +1,43 @@
+{
+  "name": "mithril-test-browser",
+  "version": "0.0.1",
+  "description": "Test browser for the mithril physics engine",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "three": "^0.70.0"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.4",
+    "browserify": "^9.0.3",
+    "chai": "^2.1.1",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^4.0.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-less": "^3.0.1",
+    "gulp-sourcemaps": "^1.5.0",
+    "gulp-usemin": "^0.3.11",
+    "karma": "^0.12.31",
+    "karma-babel-preprocessor": "^4.0.0",
+    "karma-browserify": "^4.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.1.10",
+    "karma-mocha-reporter": "^1.0.0",
+    "karma-notify-reporter": "^0.1.1",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "mocha": "^2.2.0",
+    "through2": "^0.6.3"
+  },
+  "scripts": {
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yggie/mithril-test-browser.git"
+  },
+  "author": "Bryan Yap",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/yggie/mithril-test-browser/issues"
+  },
+  "homepage": "https://github.com/yggie/mithril-test-browser"
+}

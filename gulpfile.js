@@ -4,7 +4,9 @@
   var gulp = require('gulp'),
       usemin = require('gulp-usemin'),
       sourcemaps = require('gulp-sourcemaps'),
-      babel = require('gulp-babel'),
+      browserify = require('browserify'),
+      through2 = require('through2'),
+      babelify = require('babelify'),
       concat = require('gulp-concat'),
       less = require('gulp-less'),
       config = {
@@ -27,11 +29,18 @@
 
 
   gulp.task('compile-js', function () {
-    return gulp.src(config.paths.src + '/**/*.js')
-      .pipe(sourcemaps.init())
-      .pipe(babel())
+    return gulp.src(config.paths.src + '/run.js')
+      .pipe(through2.obj(function (file, enc, next) {
+        return browserify(file.path, { debug: true })
+          .transform(babelify)
+          .bundle(function (err, res) {
+            if (err) { return next(err); }
+
+            file.contents = res;
+            next(null, file);
+          });
+      }))
       .pipe(concat('app.js'))
-      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.paths.dist));
   });
 
