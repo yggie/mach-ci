@@ -36,11 +36,9 @@
   });
 
 
-  gulp.task('compile-all', ['compile-less', 'compile-js']);
-
-
-  gulp.task('build', ['compile-all'], function () {
-    return gulp.src('./index.html')
+  gulp.task('build', ['compile-js'], function () {
+    return gulp.src('./index-template.html')
+      .pipe(concat('index.html.template'))
       .pipe(usemin())
       .pipe(gulp.dest('dist/'));
   });
@@ -52,7 +50,7 @@
   });
 
 
-  gulp.task('default', ['compile-all'], function () {
+  gulp.task('default', ['compile-less', 'compile-js'], function () {
     gulp.start('watch');
   });
 

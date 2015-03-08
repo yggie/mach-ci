@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <link rel="stylesheet" href="app.css"/>
+  <link rel="stylesheet" href="app.min.css"/>
 </head>
 <body>
   <div id="the-display"></div>
 
   <script id="logs" type="text/logs"><!-- LOGS_PLACEHOLDER --></script>
 
-  <script src="libraries.js"></script>
+  <script src="libraries.min.js"></script>
 
-  <script src="app.js"></script>
+  <script src="app.min.js"></script>
 </body>
 </html>

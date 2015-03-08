@@ -83,6 +83,7 @@
         geometry = parseGeometry(match[4]);
 
         self.bodies[id] = new Body(id, position, rotation, geometry);
+        console.log(0, match);
         return;
       }
 
@@ -98,6 +99,7 @@
         position = parseVector(match[2]);
         rotation = parseQuaternion(match[3]);
 
+        console.log(1, match);
         self.bodies[id].pushState(currentStep, position, rotation);
         return;
       }
