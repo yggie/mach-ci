@@ -32,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yggie/mithril-test-browser.git"
+    "url": "https://github.com/yggie/mithril-ci.git"
   },
   "author": "Bryan Yap",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/yggie/mithril-test-browser/issues"
+    "url": "https://github.com/yggie/mithril-ci/issues"
   },
-  "homepage": "https://github.com/yggie/mithril-test-browser"
+  "homepage": "https://github.com/yggie/mithril-ci"
 }
