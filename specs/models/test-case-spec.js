@@ -1,4 +1,4 @@
-import { TestCase } from '../../src/models/test-case';
+import { TestCase } from '../../client/javascript/models/test-case';
 
 describe('TestCase model', function () {
   'use strict';

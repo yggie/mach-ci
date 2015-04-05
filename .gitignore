@@ -1,9 +1,3 @@
 node_modules
 bower_components
-
-dist/app.js
-dist/app.css
-dist/libraries.js
-dist/index.html
-
-index-generated.html
+public/assets

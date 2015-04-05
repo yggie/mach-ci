@@ -17,7 +17,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/three/three.js',
+      'specs/spec-helper.js',
+      'bower_components/threejs/build/three.js',
+      'bower_components/react/react.js',
+      'client/javascript/**/*.jsx',
       'specs/**/*-spec.js'
     ],
 
@@ -30,7 +33,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'specs/**/*.js': ['browserify']
+      'client/javascript/**/*.jsx': ['browserify'],
+      'specs/**/*-spec.js': ['browserify']
     },
 
 
@@ -49,7 +53,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ['mocha', 'notify'],
 
 
     // web server port
@@ -76,6 +80,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false
   });
 };

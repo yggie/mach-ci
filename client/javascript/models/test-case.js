@@ -8,7 +8,7 @@ export class TestCase {
     self.bodies = {};
 
     let currentStep = 0;
-    logs.split("\n").forEach(function (line) {
+    logs.split('\n').forEach(function (line) {
       var match = null,
           id = null,
           position = null,
@@ -56,11 +56,11 @@ export class TestCase {
     let cases = [];
 
     let caseLog = null;
-    fullLog.split("\n").map(function (line) {
+    fullLog.split('\n').map(function (line) {
       let match = line.match(/----.+----/g);
       if (match) {
         if (caseLog) {
-          cases.push(new TestCase(caseLog.join("\n")));
+          cases.push(new TestCase(caseLog.join('\n')));
         }
         caseLog = [];
       }
@@ -70,7 +70,7 @@ export class TestCase {
       }
     });
 
-    cases.push(new TestCase(caseLog.join("\n")));
+    cases.push(new TestCase(caseLog.join('\n')));
 
     return cases;
   }

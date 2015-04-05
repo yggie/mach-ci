@@ -1,4 +1,6 @@
-import * as utils from '../src/utils';
+/* global THREE:false */
+
+import * as utils from '../client/javascript/utils';
 
 describe('utils module', function () {
   'use strict';

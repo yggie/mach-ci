@@ -1,0 +1,18 @@
+{
+  "name": "mithril-ci",
+  "version": "0.0.1",
+  "homepage": "https://github.com/yggie/mithril-ci",
+  "authors": [
+    "Bryan Yap <bryan.yap@alliants.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "specs"
+  ],
+  "dependencies": {
+    "react": "~0.13.1"
+  }
+}

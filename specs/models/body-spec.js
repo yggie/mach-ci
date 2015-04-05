@@ -1,4 +1,6 @@
-import { Body } from '../../src/models/body';
+/* global THREE:false */
+
+import { Body } from '../../client/javascript/models/body';
 
 describe('Body model', function () {
   'use strict';
