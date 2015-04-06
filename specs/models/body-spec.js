@@ -1,8 +1,8 @@
 /* global THREE:false */
 
-import { Body } from '../../client/javascript/models/body';
+import Body from '../../client/javascript/models/body';
 
-describe('Body model', function () {
+describe('Body', function () {
   'use strict';
 
   let body = function (options) {
@@ -34,14 +34,6 @@ describe('Body model', function () {
     expect(body({ geometry: geom }).geometry).to.deep.equal(geom);
   });
 
-  it('has a material', function () {
-    expect(body().material).to.be.an.instanceof(THREE.Material);
-  });
-
-  it('has a mesh', function () {
-    expect(body().mesh).to.be.an.instanceof(THREE.Mesh);
-  });
-
   it('is initially at state 0', function () {
     expect(body().stateIndex).to.equal(0);
   });
@@ -61,16 +53,6 @@ describe('Body model', function () {
 
     it('updates the body state index', function () {
       expect(currentBody.stateIndex).to.deep.equal(1);
-    });
-
-    it('updates the mesh position accordingly', function () {
-      expect(currentBody.mesh.position.toArray()).to
-        .deep.equal(position.toArray());
-    });
-
-    it('updates the mesh rotation accordingly', function () {
-      expect(currentBody.mesh.quaternion.toArray()).to
-        .deep.equal(rotation.toArray());
     });
   });
 });

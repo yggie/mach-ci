@@ -1,5 +1,15 @@
 /* global React:false */
 
+import TestCase from './models/test-case';
+
+let logsElement = document.getElementById('logs'),
+    testCases = [];
+
+if (logsElement) {
+  let logs = logsElement.innerText;
+  testCases = TestCase.buildFromFullLogs(logs);
+}
+
 let app = (
   /* jshint ignore:start */
   <h1>Hello World!</h1>

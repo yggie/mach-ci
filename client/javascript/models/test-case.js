@@ -1,13 +1,14 @@
 import * as utils from '../utils';
-import { Body } from './body';
+import Body from './body';
 
-export class TestCase {
+export default class TestCase {
   constructor(logs) {
     let self = this;
     self.original = logs;
     self.bodies = {};
 
     let currentStep = 0;
+
     logs.split('\n').forEach(function (line) {
       var match = null,
           id = null,
@@ -15,9 +16,15 @@ export class TestCase {
           rotation = null,
           geometry = null;
 
-      match = line.match(/---- (.*) stdout ----/);
+      match = line.match(/^\s*test ([^\s]+) \.\.\./);
       if (match) {
+        // do not return, there is no guarantee that this is the complete log
         self.title = match[1];
+      }
+
+      match = line.match(/(ok|fail)$/);
+      if (match) {
+        self.result = match[1];
         return;
       }
 
@@ -52,12 +59,16 @@ export class TestCase {
     self.numberOfSteps = currentStep;
   }
 
+  didPass() {
+    return this.result === 'ok';
+  }
+
   static buildFromFullLogs(fullLog) {
     let cases = [];
 
     let caseLog = null;
     fullLog.split('\n').map(function (line) {
-      let match = line.match(/----.+----/g);
+      let match = line.match(/^\s*test [^\s]+ \.\.\./g);
       if (match) {
         if (caseLog) {
           cases.push(new TestCase(caseLog.join('\n')));
@@ -68,18 +79,18 @@ export class TestCase {
       if (caseLog) {
         caseLog.push(line);
       }
+
+      match = line.match(/(?:ok|fail)$/);
+      if (match) {
+        cases.push(new TestCase(caseLog.join('\n')));
+        caseLog = null;
+      }
     });
 
-    cases.push(new TestCase(caseLog.join('\n')));
+    if (caseLog) {
+      cases.push(new TestCase(caseLog.join('\n')));
+    }
 
     return cases;
-  }
-
-  prepareRender(scene) {
-    for (var id in this.bodies) {
-      var body = this.bodies[id];
-      body.useState(0);
-      scene.add(body.mesh);
-    }
   }
 }

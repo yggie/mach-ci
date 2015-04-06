@@ -26,10 +26,12 @@
       };
 
 
-  var clientDependencies = gulp.src([
-    'bower_components/threejs/build/three.js',
-    'bower_components/react/react.js',
-  ]);
+  var clientDependencies = function () {
+    return gulp.src([
+      'bower_components/threejs/build/three.js',
+      'bower_components/react/react.js',
+    ]);
+  };
 
 
   var compileSass = lazypipe()
@@ -82,7 +84,7 @@
       })
       .pipe(compileJsx());
 
-    var js = merge(clientDependencies, jsx)
+    var js = merge(clientDependencies(), jsx)
       .pipe(concat('javascript/application.js'))
       .pipe(uglify());
 
@@ -115,7 +117,7 @@
       .pipe(compileJsx({ debug: true }))
       .on('error', notify.onError());
 
-    return merge(clientDependencies, jsx)
+    return merge(clientDependencies(), jsx)
       .pipe(concat('javascript/application.js'))
       .pipe(gulp.dest(config.paths.dist))
       .pipe(notify({ message: 'Successfully compiled .jsx files' }));
@@ -123,7 +125,7 @@
 
 
   gulp.task('watch', function () {
-    gulp.watch([config.paths.javascript + '/**/*.jsx'], ['compile-jsx']);
+    gulp.watch([config.paths.javascript + '/**/*.jsx', config.paths.javascript + '/**/*.js'], ['compile-jsx']);
     gulp.watch([config.paths.styles + '/**/*.scss'], ['compile-sass']);
   });
 
