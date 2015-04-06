@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 
+import Store from './store';
 import TestCasesList from './components/test-cases-list.jsx';
 import TestSuite from './models/test-suite';
 
@@ -16,7 +17,7 @@ export default class Application extends React.Component {
     }
 
     this.state = {
-      testSuite: TestSuite.create(logs)
+      testSuite: Store.create(TestSuite, logs)
     };
   }
 
@@ -27,9 +28,8 @@ export default class Application extends React.Component {
     $.ajax({
       url: '/sample-05-04-2015.log',
       success: function (result) {
-        var suite = TestSuite.create(result);
         self.setState({
-          testSuite: suite
+          testSuite: Store.create(TestSuite, result)
         });
       }
     });

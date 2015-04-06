@@ -1,22 +1,6 @@
 'use strict';
 
-var callbacks = {},
-    globalHandles = 1;
-
-function eventNameFor(eventType, object) {
-  if (!Dispatcher.isRegistered(object)) {
-    throw 'Object has not been registered on the application!';
-  }
-  return eventType + '-' + object.__handle__;
-}
-
-function createEventName(klass) {
-  return eventNameFor('create', klass);
-}
-
-function updateEventName(instance) {
-  return eventNameFor('update', instance);
-}
+var callbacks = {};
 
 export default class Dispatcher {
   static on(eventName, callback) {
@@ -35,47 +19,19 @@ export default class Dispatcher {
     };
   }
 
-  static notify(eventName, args) {
+
+  static dispatch(eventName) {
+    var args = Array.prototype.splice.call(arguments, 1, arguments.length);
     (callbacks[eventName] || []).forEach(function (callback) {
       callback.apply(null, args);
     });
   }
 
-  static onCreate(klass, callback) {
-    return this.on(createEventName(klass), callback);
+
+  static flush() {
+    // do nothing for now
   }
 
-  static onUpdate(instance, callback) {
-    return this.on(updateEventName(instance), callback);
-  }
-
-  static executeAndRegisterOnUpdate(instance, callback) {
-    callback.call(null, instance);
-    return this.on(updateEventName(instance), callback);
-  }
-
-  static notifyCreate(instance) {
-    this.register(instance);
-    return this.notify(createEventName(instance.constructor), [instance]);
-  }
-
-  static notifyUpdate(instance) {
-    return this.notify(updateEventName(instance), [instance]);
-  }
-
-  static register(object) {
-    if (this.isRegistered(object)) {
-      console.log('Object has already been registered to the store');
-    } else {
-      object.__handle__ = globalHandles++;
-    }
-
-    return object.__handle__;
-  }
-
-  static isRegistered(object) {
-    return !!object.__handle__;
-  }
 
   static clearAllListeners() {
     callbacks = {};

@@ -1,5 +1,4 @@
 import * as utils from '../utils';
-import Dispatcher from '../dispatcher';
 import Body from './body';
 
 export default class TestCase {
@@ -75,5 +74,3 @@ export default class TestCase {
     return this.result === 'ok';
   }
 }
-
-Dispatcher.register(TestCase);

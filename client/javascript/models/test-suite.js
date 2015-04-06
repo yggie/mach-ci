@@ -1,4 +1,3 @@
-import Dispatcher from '../dispatcher';
 import TestCase from './test-case';
 
 export default class TestSuite {
@@ -44,18 +43,4 @@ export default class TestSuite {
   testCases() {
     return this._cases;
   }
-
-
-  static create(logs) {
-    let suite = new TestSuite(logs);
-
-    Dispatcher.notifyCreate(suite);
-    suite.testCases().forEach(function (testCase) {
-      Dispatcher.notifyCreate(testCase);
-    });
-
-    return suite;
-  }
 }
-
-Dispatcher.register(TestSuite);

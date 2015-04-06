@@ -32,14 +32,4 @@ describe('TestSuite model', function () {
     expect(cases[1].title()).to.equal('tests::some_other_test');
     expect(cases[2].title()).to.equal('tests::another_test');
   });
-
-
-  it('can be initialized fully registered on the Store', function () {
-    let suite = TestSuite.create(logs());
-
-    expect(suite).to.be.registered;
-    suite.testCases().forEach(function (testCase) {
-      expect(testCase).to.be.registered;
-    });
-  });
 });
