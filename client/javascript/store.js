@@ -1,63 +1,7 @@
 'use strict';
 
+import { deepCopy, construct } from './utils';
 import Dispatcher from './dispatcher';
-
-function construct(klass, args) {
-  function F() {
-    return klass.apply(this, args);
-  }
-  F.prototype = klass.prototype;
-
-  return new F();
-}
-
-
-function clone(obj) {
-  var copy;
-
-  // Handle the 3 simple types, and null or undefined
-  if (obj === null || typeof obj !== 'object') {
-    return obj;
-  }
-
-  // Handle Date
-  if (obj instanceof Date) {
-    copy = new Date();
-    copy.setTime(obj.getTime());
-    return copy;
-  }
-
-  // Handle Array
-  if (obj instanceof Array) {
-    copy = [];
-    for (var i = 0, len = obj.length; i < len; i++) {
-      copy[i] = clone(obj[i]);
-    }
-    return copy;
-  }
-
-  // Handle Object
-  if (obj instanceof Object) {
-    copy = {};
-    if (obj.constructor) {
-      function F() { }
-      F.prototype = obj.constructor.prototype;
-
-      copy = new F();
-    }
-
-    for (var attr in obj) {
-      if (obj.hasOwnProperty(attr)) {
-        copy[attr] = clone(obj[attr]);
-      }
-    }
-
-    return copy;
-  }
-
-  throw new Error('Unable to copy obj! Its type isn\'t supported.');
-}
-
 
 var cache = {},
     globalId = 0;
@@ -70,12 +14,13 @@ export default class Store {
     this.register(instance);
     Dispatcher.dispatch(this.eventName('create', klass), instance);
 
-    return clone(instance);
+    return deepCopy(instance);
   }
 
 
   static update(instance) {
-    cache[instance.$id] = clone(instance);
+    // TODO create deep copies at the dispatch level?
+    cache[instance.$id] = deepCopy(instance);
     Dispatcher.dispatch(this.eventName('update', instance), instance);
   }
 
