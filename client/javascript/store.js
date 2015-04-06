@@ -4,7 +4,7 @@ var callbacks = {},
     globalHandles = 1;
 
 function eventNameFor(eventType, object) {
-  if (!object.__handle__) {
+  if (!Store.isRegistered(object)) {
     throw 'Object has not been registered on the application!';
   }
   return eventType + '-' + object.__handle__;
@@ -49,6 +49,11 @@ export default class Store {
     return this.on(updateEventName(instance), callback);
   }
 
+  static executeAndRegisterOnUpdate(instance, callback) {
+    callback.call(null, instance);
+    return this.on(updateEventName(instance), callback);
+  }
+
   static notifyCreate(instance) {
     this.register(instance);
     return this.notify(createEventName(instance.constructor), [instance]);
@@ -59,13 +64,17 @@ export default class Store {
   }
 
   static register(object) {
-    if (object.__handle__) {
+    if (this.isRegistered(object)) {
       console.log('Object has already been registered to the store');
     } else {
       object.__handle__ = globalHandles++;
     }
 
     return object.__handle__;
+  }
+
+  static isRegistered(object) {
+    return !!object.__handle__;
   }
 
   static clearAllListeners() {

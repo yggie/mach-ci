@@ -1,10 +1,11 @@
 import * as utils from '../utils';
+import Store from '../store';
 import Body from './body';
 
 export default class TestCase {
   constructor(logs) {
     let self = this;
-    self.original = logs;
+    self._snippet = logs;
     self.bodies = {};
 
     let currentStep = 0;
@@ -19,7 +20,7 @@ export default class TestCase {
       match = line.match(/^\s*test ([^\s]+) \.\.\./);
       if (match) {
         // do not return, there is no guarantee that this is the complete log
-        self.title = match[1];
+        self._title = match[1];
       }
 
       match = line.match(/(ok|fail)$/);
@@ -59,38 +60,20 @@ export default class TestCase {
     self.numberOfSteps = currentStep;
   }
 
+
+  snippet() {
+    return this._snippet;
+  }
+
+
+  title() {
+    return this._title;
+  }
+
+
   didPass() {
     return this.result === 'ok';
   }
-
-  static buildFromFullLogs(fullLog) {
-    let cases = [];
-
-    let caseLog = null;
-    fullLog.split('\n').map(function (line) {
-      let match = line.match(/^\s*test [^\s]+ \.\.\./g);
-      if (match) {
-        if (caseLog) {
-          cases.push(new TestCase(caseLog.join('\n')));
-        }
-        caseLog = [];
-      }
-
-      if (caseLog) {
-        caseLog.push(line);
-      }
-
-      match = line.match(/(?:ok|fail)$/);
-      if (match) {
-        cases.push(new TestCase(caseLog.join('\n')));
-        caseLog = null;
-      }
-    });
-
-    if (caseLog) {
-      cases.push(new TestCase(caseLog.join('\n')));
-    }
-
-    return cases;
-  }
 }
+
+Store.register(TestCase);

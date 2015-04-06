@@ -1,13 +1,13 @@
 /* global React:false */
 
-import TestCase from './models/test-case';
+import TestSuite from './models/test-suite';
 
 let logsElement = document.getElementById('logs'),
-    testCases = [];
+    testSuite = null;
 
 if (logsElement) {
   let logs = logsElement.innerText;
-  testCases = TestCase.buildFromFullLogs(logs);
+  testSuite = TestSuite.create(logs);
 }
 
 let app = (

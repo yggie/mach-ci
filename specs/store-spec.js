@@ -32,6 +32,21 @@ describe('Store', function () {
   });
 
 
+  it('allows immediate execution and registering to listen for update events', function () {
+    var example = new Example(),
+        counter = 0;
+
+    Store.notifyCreate(example);
+    Store.executeAndRegisterOnUpdate(example, function (arg) {
+      expect(arg).to.equal(example);
+      counter++;
+    });
+    Store.notifyUpdate(example);
+
+    expect(counter).to.equal(2);
+  });
+
+
   it('maintains a list of independent events for each instance', function (done) {
     var example1 = new Example(),
         example2 = new Example(),

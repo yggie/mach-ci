@@ -21,6 +21,7 @@ module.exports = function(config) {
       'bower_components/threejs/build/three.js',
       'bower_components/react/react.js',
       'client/javascript/**/*.jsx',
+      'specs/extensions/**/*.js',
       'specs/**/*-spec.js'
     ],
 
@@ -34,7 +35,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'client/javascript/**/*.jsx': ['browserify'],
-      'specs/**/*-spec.js': ['browserify']
+      'specs/**/*.js': ['browserify']
     },
 
 
