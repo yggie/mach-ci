@@ -19,6 +19,7 @@ module.exports = function(config) {
     files: [
       'specs/spec-helper.js',
       'bower_components/threejs/build/three.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/react/react.js',
       'client/javascript/**/*.jsx',
       'specs/extensions/**/*.js',
@@ -28,6 +29,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+      'client/javascript/run.jsx'
     ],
 
 

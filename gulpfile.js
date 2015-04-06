@@ -28,6 +28,7 @@
 
   var clientDependencies = function () {
     return gulp.src([
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/threejs/build/three.js',
       'bower_components/react/react.js',
     ]);
@@ -79,7 +80,7 @@
       .pipe(compileSass())
       .pipe(minifyCss());
 
-    var jsx = gulp.src(config.paths.javascript + '/application.jsx', {
+    var jsx = gulp.src(config.paths.javascript + '/run.jsx', {
         base: config.paths.base
       })
       .pipe(compileJsx());
@@ -111,7 +112,7 @@
 
 
   gulp.task('compile-jsx', function () {
-    var jsx = gulp.src(config.paths.javascript + '/application.jsx', {
+    var jsx = gulp.src(config.paths.javascript + '/run.jsx', {
         base: config.paths.base
       })
       .pipe(compileJsx({ debug: true }))

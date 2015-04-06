@@ -1,22 +1,52 @@
-/* global React:false */
+import React from 'react';
+import $ from 'jquery';
 
+import TestCasesList from './components/test-cases-list.jsx';
 import TestSuite from './models/test-suite';
 
-let logsElement = document.getElementById('logs'),
-    testSuite = null;
+export default class Application extends React.Component {
+  constructor() {
+    super();
 
-if (logsElement) {
-  let logs = logsElement.innerText;
-  testSuite = TestSuite.create(logs);
+    let logsElement = document.getElementById('logs'),
+        logs = '';
+
+    if (logsElement) {
+      logs = logsElement.innerText;
+    }
+
+    this.state = {
+      testSuite: TestSuite.create(logs)
+    };
+  }
+
+
+  componentDidMount() {
+    var self = this;
+
+    $.ajax({
+      url: '/sample-05-04-2015.log',
+      success: function (result) {
+        var suite = TestSuite.create(result);
+        self.setState({
+          testSuite: suite
+        });
+      }
+    });
+  }
+
+
+  render() {
+    return (
+      /* jshint ignore:start */
+        <main>
+          <h1>Hello World!</h1>
+          <TestCasesList testSuite={this.state.testSuite} />
+        </main>
+      /* jshint ignore:end */
+    );
+  }
 }
-
-let app = (
-  /* jshint ignore:start */
-  <h1>Hello World!</h1>
-  /* jshint ignore:end */
-);
-
-React.render(app, document.body);
 
 // (function (document, window, THREE) {
 //   'use strict';

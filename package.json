@@ -23,6 +23,7 @@
   },
   "browserify-shim": {
     "three": "global:THREE",
+    "jquery": "global:jQuery",
     "react": "global:React"
   },
   "devDependencies": {
