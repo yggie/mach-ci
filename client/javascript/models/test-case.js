@@ -1,5 +1,5 @@
 import * as utils from '../utils';
-import Store from '../store';
+import Dispatcher from '../dispatcher';
 import Body from './body';
 
 export default class TestCase {
@@ -76,4 +76,4 @@ export default class TestCase {
   }
 }
 
-Store.register(TestCase);
+Dispatcher.register(TestCase);

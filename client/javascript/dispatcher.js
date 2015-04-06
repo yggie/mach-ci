@@ -4,7 +4,7 @@ var callbacks = {},
     globalHandles = 1;
 
 function eventNameFor(eventType, object) {
-  if (!Store.isRegistered(object)) {
+  if (!Dispatcher.isRegistered(object)) {
     throw 'Object has not been registered on the application!';
   }
   return eventType + '-' + object.__handle__;
@@ -18,7 +18,7 @@ function updateEventName(instance) {
   return eventNameFor('update', instance);
 }
 
-export default class Store {
+export default class Dispatcher {
   static on(eventName, callback) {
     let callbackList = callbacks[eventName] = callbacks[eventName] || [];
     callbackList.push(callback);

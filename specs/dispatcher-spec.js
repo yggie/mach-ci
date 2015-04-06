@@ -1,34 +1,34 @@
-import Store from '../client/javascript/store';
+import Dispatcher from '../client/javascript/dispatcher';
 
-describe('Store', function () {
+describe('Dispatcher', function () {
   'use strict';
 
   class Example { }
   class AnotherExample { }
-  Store.register(Example);
-  Store.register(AnotherExample);
+  Dispatcher.register(Example);
+  Dispatcher.register(AnotherExample);
 
 
   it('allows registering to listen for create events', function (done) {
     var example = new Example();
-    Store.onCreate(Example, function (arg) {
+    Dispatcher.onCreate(Example, function (arg) {
       expect(arg).to.equal(example);
       done();
     });
-    Store.notifyCreate(example);
+    Dispatcher.notifyCreate(example);
   });
 
 
   it('allows registering to listen for update events', function (done) {
     var example = new Example();
-    Store.notifyCreate(example);
-    Store.onUpdate(example, function (arg) {
+    Dispatcher.notifyCreate(example);
+    Dispatcher.onUpdate(example, function (arg) {
       expect(arg).to.equal(example);
       expect(arg.didUpdate).to.be.true;
       done();
     });
     example.didUpdate = true;
-    Store.notifyUpdate(example);
+    Dispatcher.notifyUpdate(example);
   });
 
 
@@ -36,12 +36,12 @@ describe('Store', function () {
     var example = new Example(),
         counter = 0;
 
-    Store.notifyCreate(example);
-    Store.executeAndRegisterOnUpdate(example, function (arg) {
+    Dispatcher.notifyCreate(example);
+    Dispatcher.executeAndRegisterOnUpdate(example, function (arg) {
       expect(arg).to.equal(example);
       counter++;
     });
-    Store.notifyUpdate(example);
+    Dispatcher.notifyUpdate(example);
 
     expect(counter).to.equal(2);
   });
@@ -52,16 +52,16 @@ describe('Store', function () {
         example2 = new Example(),
         atLeastOne = false;
 
-    Store.notifyCreate(example1);
-    Store.onUpdate(example1, function (arg) {
+    Dispatcher.notifyCreate(example1);
+    Dispatcher.onUpdate(example1, function (arg) {
       expect(arg).to.equal(example1);
       if (atLeastOne) {
         done();
       }
       atLeastOne = true;
     });
-    Store.notifyCreate(example2);
-    Store.onUpdate(example2, function (arg) {
+    Dispatcher.notifyCreate(example2);
+    Dispatcher.onUpdate(example2, function (arg) {
       expect(arg).to.equal(example2);
       if (atLeastOne) {
         done();
@@ -69,8 +69,8 @@ describe('Store', function () {
       atLeastOne = true;
     });
 
-    Store.notifyUpdate(example1);
-    Store.notifyUpdate(example2);
+    Dispatcher.notifyUpdate(example1);
+    Dispatcher.notifyUpdate(example2);
   });
 
 
@@ -79,14 +79,14 @@ describe('Store', function () {
         anotherExample = new AnotherExample(),
         atLeastOne = false;
 
-    Store.onCreate(Example, function (arg) {
+    Dispatcher.onCreate(Example, function (arg) {
       expect(arg).to.equal(example);
       if (atLeastOne) {
         done();
       }
       atLeastOne = true;
     });
-    Store.onCreate(AnotherExample, function (arg) {
+    Dispatcher.onCreate(AnotherExample, function (arg) {
       expect(arg).to.equal(anotherExample);
       if (atLeastOne) {
         done();
@@ -94,8 +94,8 @@ describe('Store', function () {
       atLeastOne = true;
     });
 
-    Store.notifyCreate(example);
-    Store.notifyCreate(anotherExample);
+    Dispatcher.notifyCreate(example);
+    Dispatcher.notifyCreate(anotherExample);
   });
 
 
@@ -103,20 +103,20 @@ describe('Store', function () {
     var example = new Example(),
         counter = 0;
 
-    Store.notifyCreate(example);
-    let unregister = Store.onUpdate(example, function () {
+    Dispatcher.notifyCreate(example);
+    let unregister = Dispatcher.onUpdate(example, function () {
           if (counter++) {
             throw 'Called more than once!';
           }
         });
 
-    Store.notifyUpdate(example);
+    Dispatcher.notifyUpdate(example);
     unregister.call();
-    Store.notifyUpdate(example);
+    Dispatcher.notifyUpdate(example);
   });
 
 
   afterEach(function () {
-    Store.clearAllListeners();
+    Dispatcher.clearAllListeners();
   });
 });

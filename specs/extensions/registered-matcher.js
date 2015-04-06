@@ -1,6 +1,6 @@
 /* global chai:false */
 
-import Store from '../../client/javascript/store.js';
+import Dispatcher from '../../client/javascript/dispatcher';
 
 (function (chai) {
   'use strict';
@@ -10,9 +10,9 @@ import Store from '../../client/javascript/store.js';
       var instance = this._obj;
 
       this.assert(
-        Store.isRegistered(instance),
-        'Expected ' + instance.toString() + ' to be registered to the Store but was not',
-        'Expected ' + instance.toString() + ' not to be registered to the Store but was',
+        Dispatcher.isRegistered(instance),
+        'Expected ' + instance.toString() + ' to be registered to the Dispatcher but was not',
+        'Expected ' + instance.toString() + ' not to be registered to the Dispatcher but was',
         instance
       );
     });
