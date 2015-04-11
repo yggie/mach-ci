@@ -1,8 +1,8 @@
 /* global __dirname:false */
 
-(function (require, __dirname) {
-  'use strict';
+'use strict';
 
+(function (require, __dirname) {
   var gulp = require('gulp'),
       sass = require('gulp-sass'),
       sourcemaps = require('gulp-sourcemaps'),
@@ -16,13 +16,16 @@
       minifyCss = require('gulp-minify-css'),
       concat = require('gulp-concat'),
       merge = require('merge-stream'),
-      config = {
+      path = require('path');
+
+
+  var config = {
         paths: {
-          base: __dirname + '/client',
-          javascript: __dirname + '/client/javascript',
-          styles: __dirname + '/client/stylesheets',
-          dist: __dirname + '/public/assets'
-        },
+          base: path.join(__dirname, '/client'),
+          javascript: path.join(__dirname, '/client/javascript'),
+          styles: path.join(__dirname, '/client/stylesheets'),
+          dist: path.join(__dirname, '/public/assets')
+        }
       };
 
 
@@ -31,6 +34,7 @@
       'bower_components/jquery/dist/jquery.js',
       'bower_components/threejs/build/three.js',
       'bower_components/react/react.js',
+      'bower_components/classnames/index.js'
     ]);
   };
 
@@ -40,7 +44,7 @@
     .pipe(autoprefixer, {
       browsers: ['last 2 versions', 'Firefox ESR'],
       cascade: true,
-      remove: true,
+      remove: true
     });
 
 
@@ -48,7 +52,7 @@
     return through2.obj(function (file, enc, next) {
       browserify(file.path, options)
         .transform(babelify.configure({
-          sourceMapRelative: config.paths.base,
+          sourceMapRelative: config.paths.base
         }))
         .bundle(function (err, res) {
           if (err) {

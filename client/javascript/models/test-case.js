@@ -1,3 +1,5 @@
+'use strict';
+
 import * as utils from '../utils';
 import Body from './body';
 
@@ -67,6 +69,13 @@ export default class TestCase {
 
   title() {
     return this._title;
+  }
+
+
+  shortTitle() {
+    return this._title.replace(/\w+::/g, function (match) {
+      return match[0].toUpperCase() + ':';
+    });
   }
 
 

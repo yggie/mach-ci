@@ -1,0 +1,14 @@
+$base-font: 'Open Sans', sans-serif;
+
+html, body {
+  font-family: $base-font;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  font-family: $base-font;
+}
+
+p {
+  font-family: $base-font;
+}

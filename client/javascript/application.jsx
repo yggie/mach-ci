@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import $ from 'jquery';
 
@@ -38,12 +40,15 @@ export default class Application extends React.Component {
 
   render() {
     return (
-      /* jshint ignore:start */
-        <main>
-          <h1>Hello World!</h1>
+      <div>
+        <header className="main-header">
+          <a href="/">Mithril CI v0.0.1</a>
+        </header>
+
+        <main className="main-content">
           <TestCasesList testSuite={this.state.testSuite} />
         </main>
-      /* jshint ignore:end */
+      </div>
     );
   }
 }

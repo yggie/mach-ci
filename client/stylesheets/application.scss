@@ -1,8 +1,12 @@
-html, body {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-}
+@import "themes/bootstrap-lite";
+@import "themes/colors";
+@import "themes/base";
+@import "themes/typography";
+
+@import "components/card";
+@import "components/main-header";
+@import "components/main-content";
+@import "components/reports-detail";
 
 #the-display {
   position: fixed;

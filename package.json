@@ -24,6 +24,7 @@
   "browserify-shim": {
     "three": "global:THREE",
     "jquery": "global:jQuery",
+    "classnames": "global:classNames",
     "react": "global:React"
   },
   "devDependencies": {
