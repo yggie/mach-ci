@@ -1,8 +1,10 @@
+'use strict';
+
 export default class Body {
-  constructor(id, position, rotation, geometry) {
+  constructor(id, position, rotation, geometryDescription) {
     this.id = id;
     this.stateIndex = 0;
-    this.geometry = geometry;
+    this.geometryDescription = geometryDescription;
     this.states = [{
       pos: position,
       rot: rotation

@@ -15,8 +15,7 @@ export default class TestCase {
       var match = null,
           id = null,
           position = null,
-          rotation = null,
-          geometry = null;
+          rotation = null;
 
       match = line.match(/^\s*test ([^\s]+) \.\.\./);
       if (match) {
@@ -35,9 +34,8 @@ export default class TestCase {
         id = match[1];
         position = utils.parseVector(match[2]);
         rotation = utils.parseQuaternion(match[3]);
-        geometry = utils.parseGeometry(match[4]);
 
-        self.bodies[id] = new Body(id, position, rotation, geometry);
+        self.bodies[id] = new Body(id, position, rotation, match[4]);
         return;
       }
 

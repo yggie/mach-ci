@@ -1,17 +1,17 @@
 /* global THREE:false */
 
+'use strict';
+
 import Body from '../../client/javascript/models/body';
 
 describe('Body', function () {
-  'use strict';
-
   let body = function (options) {
     options = options || {};
     return new Body(
         options.id || 'my id',
         options.position || new THREE.Vector3(0, 0, 0),
         options.rotation || new THREE.Quaternion(0, 0, 0, 1),
-        options.geometry || new THREE.BoxGeometry(1, 1, 1)
+        options.geometry || 'Cube {}'
     );
   };
 
@@ -29,9 +29,8 @@ describe('Body', function () {
     expect(body({ rotation: rot }).rotation).to.deep.equal(rot);
   });
 
-  it('has a geometry', function () {
-    let geom = new THREE.BoxGeometry(1, 2, 3);
-    expect(body({ geometry: geom }).geometry).to.deep.equal(geom);
+  it('has a geometry description', function () {
+    expect(body({ geometry: 'Sphere {}' }).geometryDescription).to.equal('Sphere {}');
   });
 
   it('is initially at state 0', function () {
