@@ -56,4 +56,11 @@
 .report-detail {
   padding: 10px;
   min-height: 500px;
+
+  canvas {
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 10px $blue;
+    }
+  }
 }

@@ -15,7 +15,7 @@ export default class Application extends React.Component {
         logs = '';
 
     if (logsElement) {
-      logs = logsElement.innerText;
+      logs = logsElement.innerText || '';
     }
 
     this.state = {
