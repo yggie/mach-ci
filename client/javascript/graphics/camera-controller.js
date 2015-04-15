@@ -53,6 +53,7 @@ export default class CameraController {
     let camera = this._camera;
 
     camera.position.copy(this._tempEye);
+    // TODO this has a singularity somewhere which causes the tumble
     camera.quaternion.setFromUnitVectors(
       this._baseAxis,
       this._tempEye.clone().sub(this._center).normalize()

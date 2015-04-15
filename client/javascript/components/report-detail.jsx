@@ -33,8 +33,15 @@ export default class ReportDetail extends React.Component {
       scene: scene,
       enableCameraControl: false,
       cameraController: new CameraController(camera),
+      keepAnimating: true,
+      keepPlaying: true,
       reportEntity: new ReportEntity(this.props.selectedReport)
-    }, this.prepareToAnimate.bind(this));
+    }, function () {
+      this.prepareToAnimate();
+
+      this.animate();
+      this.play();
+    }.bind(this));
   }
 
 
@@ -52,6 +59,14 @@ export default class ReportDetail extends React.Component {
   }
 
 
+  componentWillUnmount() {
+    this.setState({
+      keepAnimating: false,
+      keepPlaying: false
+    });
+  }
+
+
   prepareToAnimate() {
     let parent = React.findDOMNode(this),
         reportEntity = this.state.reportEntity,
@@ -59,7 +74,6 @@ export default class ReportDetail extends React.Component {
         scene = this.state.scene,
         renderer = this.state.renderer;
 
-    window.camera = camera;
     camera.position.set(0, 0, 5);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(parent.clientWidth, parent.clientWidth * 9 / 14);
@@ -67,10 +81,6 @@ export default class ReportDetail extends React.Component {
     reportEntity.bodies().forEach(function (body) {
       scene.add(body.mesh);
     });
-
-    if (reportEntity.canRender()) {
-      this.animate();
-    }
   }
 
 
@@ -124,6 +134,17 @@ export default class ReportDetail extends React.Component {
   }
 
 
+  play() {
+    let state = this.state;
+
+    state.reportEntity.nextState();
+
+    if (state.keepPlaying) {
+      setTimeout(this.play.bind(this), 50);
+    }
+  }
+
+
   animate() {
     let canvas = this.state.canvas,
         camera = this.state.camera,
@@ -132,9 +153,11 @@ export default class ReportDetail extends React.Component {
         renderer = this.state.renderer,
         animate = this.animate.bind(this);
 
-    setTimeout(function () {
-      window.requestAnimationFrame(animate);
-    }, 100);
+    if (this.state.keepAnimating) {
+      setTimeout(function () {
+        window.requestAnimationFrame(animate);
+      }, 30);
+    }
 
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     // camera.matrixWorld = controller.viewMatrix();
