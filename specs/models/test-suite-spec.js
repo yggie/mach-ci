@@ -1,8 +1,8 @@
+'use strict';
+
 import TestSuite from '../../client/javascript/models/test-suite';
 
 describe('TestSuite model', function () {
-  'use strict';
-
   let logs = function () {
     return `
            Running target/debug/lib-a8870084aab755f9

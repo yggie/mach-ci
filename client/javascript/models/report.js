@@ -3,7 +3,7 @@
 import * as utils from '../utils';
 import Body from './body';
 
-export default class TestCase {
+export default class Report {
   constructor(logs) {
     let self = this;
     self._snippet = logs;

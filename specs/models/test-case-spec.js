@@ -1,25 +1,25 @@
-import TestCase from '../../client/javascript/models/test-case';
+'use strict';
 
-describe('TestCase model', function () {
-  'use strict';
+import Report from '../../client/javascript/models/report';
 
-  let testCase = function (logs) {
-    return new TestCase(logs || 'test collisions::tests::sample_test ... fail');
+describe('Report model', function () {
+  let report = function (logs) {
+    return new Report(logs || 'test collisions::tests::sample_test ... fail');
   };
 
 
   it('has a copy of the original log snippet', function () {
-    expect(testCase().snippet()).to.equal('test collisions::tests::sample_test ... fail');
+    expect(report().snippet()).to.equal('test collisions::tests::sample_test ... fail');
   });
 
 
   it('stores the title of the test', function () {
-    expect(testCase().title()).to.equal('collisions::tests::sample_test');
+    expect(report().title()).to.equal('collisions::tests::sample_test');
   });
 
 
   it('knows if the test was successful or not', function () {
-    expect(testCase().didPass()).to.be.false;
+    expect(report().didPass()).to.be.false;
   });
 
 
@@ -31,7 +31,7 @@ describe('TestCase model', function () {
       ok
     `;
 
-    let bodyIds = Object.keys(testCase(logs).bodies);
+    let bodyIds = Object.keys(report(logs).bodies);
     expect(bodyIds).to.deep.equal(['1', '2']);
   });
 
@@ -46,7 +46,7 @@ describe('TestCase model', function () {
       ok
     `;
 
-    let currentBody = testCase(logs).bodies[1];
+    let currentBody = report(logs).bodies[1];
     expect(currentBody.states.length).to.equal(2);
 
     currentBody.useState(0);
@@ -67,6 +67,6 @@ describe('TestCase model', function () {
       [Dynamics update] START step=0.2
       ok
     `;
-    expect(testCase(logs).numberOfSteps).to.equal(4);
+    expect(report(logs).numberOfSteps).to.equal(4);
   });
 });
