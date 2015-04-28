@@ -35,12 +35,13 @@ class BodyEntity {
 export default class ReportEntity {
   constructor(report) {
     this._report = report;
-    this._bodies = [];
-    this._stateIndex = 0;
+    this.bodies = [];
+    this.currentFrame = 0;
+    this.numberOfFrames = report ? report.numberOfFrames : 0;
 
     if (report) {
       let bodies = report.bodies,
-          bodyList = this._bodies;
+          bodyList = this.bodies;
       for (let id in bodies) {
         let body = bodies[id];
 
@@ -48,29 +49,29 @@ export default class ReportEntity {
       }
     }
 
-    this._canRender = this._bodies.length !== 0;
+    this.canRender = this.bodies.length !== 0;
   }
 
 
-  canRender() {
-    return this._canRender;
+  logs() {
+    return this._report ? this._report.fullLogs : '';
   }
 
 
-  nextState() {
-    let bodies = this._bodies,
+  snippets() {
+    return this._report ? this._report.snippets : [];
+  }
+
+
+  setFrame(index) {
+    let bodies = this.bodies,
         length = bodies.length;
 
-    this._stateIndex = (this._stateIndex + 1) % this._report.numberOfSteps;
+    this.currentFrame = index;
     for (let i = 0; i < length; i++) {
       let body = bodies[i];
 
-      body.useState(this._stateIndex);
+      body.useState(index);
     }
-  }
-
-
-  bodies() {
-    return this._bodies;
   }
 }

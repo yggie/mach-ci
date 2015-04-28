@@ -49,7 +49,7 @@ export default class ReportDetail extends React.Component {
     let scene = this.state.scene,
         reportEntity = this.state.reportEntity;
 
-    reportEntity.bodies().forEach(function (body) {
+    reportEntity.bodies.forEach(function (body) {
       scene.remove(body.mesh);
     });
 
@@ -78,7 +78,7 @@ export default class ReportDetail extends React.Component {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(parent.clientWidth, parent.clientWidth * 9 / 14);
 
-    reportEntity.bodies().forEach(function (body) {
+    reportEntity.bodies.forEach(function (body) {
       scene.add(body.mesh);
     });
   }
@@ -135,9 +135,10 @@ export default class ReportDetail extends React.Component {
 
 
   play() {
-    let state = this.state;
+    let state = this.state,
+        entity = state.reportEntity;
 
-    state.reportEntity.nextState();
+    entity.setFrame((entity.currentFrame + 1) % entity.numberOfFrames);
 
     if (state.keepPlaying) {
       setTimeout(this.play.bind(this), 50);
@@ -189,8 +190,16 @@ export default class ReportDetail extends React.Component {
           onKeyUp={this.canvasOnKeyUp.bind(this)}
           onMouseMove={this.canvasOnDrag.bind(this)}
           className={classNames({
-            'hidden': !reportEntity.canRender()
+            'hidden': !reportEntity.canRender
           })}></canvas>
+
+          <pre className="logs">
+            {
+              reportEntity.snippets().map(function (snippet, index) {
+                return <div key={index}>{snippet}</div>;
+              })
+            }
+          </pre>
       </section>
     );
   }

@@ -3,7 +3,7 @@
 export default class Body {
   constructor(id, position, rotation, geometryDescription) {
     this.id = id;
-    this.stateIndex = 0;
+    this.currentState = 0;
     this.geometryDescription = geometryDescription;
     this.states = [{
       pos: position,
@@ -12,7 +12,7 @@ export default class Body {
   }
 
   useState(index) {
-    this.stateIndex = index;
+    this.currentState = index;
   }
 
   addStateAt(index, position, rotation) {
@@ -23,10 +23,10 @@ export default class Body {
   }
 
   get position() {
-    return this.states[this.stateIndex].pos;
+    return this.states[this.currentState].pos;
   }
 
   get rotation() {
-    return this.states[this.stateIndex].rot;
+    return this.states[this.currentState].rot;
   }
 }

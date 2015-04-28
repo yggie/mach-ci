@@ -6,10 +6,12 @@ import Body from './body';
 export default class Report {
   constructor(logs) {
     let self = this;
-    self._snippet = logs;
+    self.fullLogs = logs;
     self.bodies = {};
+    self.snippets = [];
 
-    let currentStep = 0;
+    let currentStep = 0,
+        snippet = [];
 
     logs.split('\n').forEach(function (line) {
       var match = null,
@@ -17,6 +19,7 @@ export default class Report {
           position = null,
           rotation = null;
 
+      snippet.push(line);
       match = line.match(/^\s*test ([^\s]+) \.\.\./);
       if (match) {
         // do not return, there is no guarantee that this is the complete log
@@ -41,6 +44,9 @@ export default class Report {
 
       match = line.match(/\[Dynamics update\] START/);
       if (match) {
+        if (currentStep !== 0) {
+          self.snippets.push(snippet.splice(0, snippet.length - 1).join('\n'));
+        }
         currentStep = currentStep + 1;
         return;
       }
@@ -56,12 +62,8 @@ export default class Report {
       }
     });
 
-    self.numberOfSteps = currentStep;
-  }
-
-
-  snippet() {
-    return this._snippet;
+    self.snippets.push(snippet.join('\n'));
+    self.numberOfFrames = currentStep;
   }
 
 

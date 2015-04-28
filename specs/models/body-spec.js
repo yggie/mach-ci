@@ -33,8 +33,8 @@ describe('Body', function () {
     expect(body({ geometry: 'Sphere {}' }).geometryDescription).to.equal('Sphere {}');
   });
 
-  it('is initially at state 0', function () {
-    expect(body().stateIndex).to.equal(0);
+  it('has the initial state set to the first state', function () {
+    expect(body().currentState).to.equal(0);
   });
 
   describe('when updating the Body state', function () {
@@ -50,8 +50,8 @@ describe('Body', function () {
       currentBody.useState(1);
     });
 
-    it('updates the body state index', function () {
-      expect(currentBody.stateIndex).to.deep.equal(1);
+    it('updates the body state', function () {
+      expect(currentBody.currentState).to.deep.equal(1);
     });
   });
 });

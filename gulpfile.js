@@ -16,6 +16,7 @@
       minifyCss = require('gulp-minify-css'),
       concat = require('gulp-concat'),
       merge = require('merge-stream'),
+      gulpFilter = require('gulp-filter'),
       path = require('path');
 
 
@@ -118,12 +119,18 @@
   gulp.task('compile-jsx', function () {
     var jsx = gulp.src(config.paths.javascript + '/run.jsx', {
         base: config.paths.base
-      })
-      .pipe(compileJsx({ debug: true }))
-      .on('error', notify.onError());
+      });
+
+    var filter = gulpFilter(['**/*.jsx']);
 
     return merge(clientDependencies(), jsx)
+      .pipe(sourcemaps.init())
+      .pipe(filter)
+        .pipe(compileJsx({ debug: true }))
+        .on('error', notify.onError())
+      .pipe(filter.restore())
       .pipe(concat('javascript/application.js'))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.paths.dist))
       .pipe(notify({ message: 'Successfully compiled .jsx files' }));
   });

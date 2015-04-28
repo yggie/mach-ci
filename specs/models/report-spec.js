@@ -7,9 +7,13 @@ describe('Report model', function () {
     return new Report(logs || 'test collisions::tests::sample_test ... fail');
   };
 
+  let trim = function (string) {
+    return string.trim().replace(/\s+/g, ' ');
+  };
+
 
   it('has a copy of the original log snippet', function () {
-    expect(report().snippet()).to.equal('test collisions::tests::sample_test ... fail');
+    expect(report().fullLogs).to.equal('test collisions::tests::sample_test ... fail');
   });
 
 
@@ -67,6 +71,42 @@ describe('Report model', function () {
       [Dynamics update] START step=0.2
       ok
     `;
-    expect(report(logs).numberOfSteps).to.equal(4);
+    expect(report(logs).numberOfFrames).to.equal(4);
+  });
+
+
+  context('with multiple test states', function () {
+    it('can return the log snippet associated with the state', function () {
+      let logs = `
+        test core::state::tests::with_velocity_test ...
+        [Collisions create_body] Body[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [Collisions create_body] Body[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [Dynamics update] START step=0.2
+        [Dynamics update] Body[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] END
+        [Dynamics update] START step=0.2
+        [Dynamics update] Body[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] Body[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] END
+        ok
+      `;
+
+      var myReport = report(logs);
+      expect(myReport.numberOfFrames).to.equal(2);
+      expect(myReport.snippets.map(trim)).to.deep.equal([`
+        test core::state::tests::with_velocity_test ...
+        [Collisions create_body] Body[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [Collisions create_body] Body[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [Dynamics update] START step=0.2
+        [Dynamics update] Body[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] END
+      `, `
+        [Dynamics update] START step=0.2
+        [Dynamics update] Body[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] Body[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
+        [Dynamics update] END
+        ok
+      `].map(trim));
+    });
   });
 });

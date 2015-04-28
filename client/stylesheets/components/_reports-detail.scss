@@ -63,4 +63,11 @@
       box-shadow: 0 0 10px $blue;
     }
   }
+
+  .logs {
+    width: 100%;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 }
