@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import ReportDetail from './report-detail/report-detail.jsx';
 
-export default class TestCasesList extends React.Component {
+export default class ReportList extends React.Component {
   componentWillMount() {
     this.selectReport(0);
   }
@@ -16,45 +16,46 @@ export default class TestCasesList extends React.Component {
   }
 
   selectReport(reportIndex) {
-    let suite = this.props.testSuite,
-        selectedReport = suite ? suite.testCases()[reportIndex] : null;
+    let suite = this.props.reportSuite,
+        selectedReport = suite ? suite.reports()[reportIndex] : null;
 
     this.setState({ selectedReport: selectedReport });
   }
 
   render() {
     var self = this,
-        suite = self.props.testSuite,
+        suite = self.props.reportSuite,
         selectedReport = self.state.selectedReport,
-        numberOfTests = suite ? suite.testCases().length : 0;
+        reports = suite ? suite.reports() : [],
+        numberOfReports = reports.length;
 
     return (
       <section>
         <section className="card">
           <h3>Summary</h3>
 
-          Tests: {numberOfTests}
+          Reports: {numberOfReports}
         </section>
 
         <section className="card reports-detail-view">
           <aside className="reports-list">
             <ul>
               {
-                (numberOfTests) ? (
-                  suite.testCases().map(function (testCase, index) {
+                (numberOfReports) ? (
+                  reports.map(function (report, index) {
                     return (
-                      <li onClick={self.selectReport.bind(self, index)} key={testCase.title()}>
+                      <li onClick={self.selectReport.bind(self, index)} key={report.title()}>
                         <i className={
                           classNames('fa', {
-                            'fa-check': testCase.didPass(),
-                            'fa-close': !testCase.didPass()
+                            'fa-check': report.didPass(),
+                            'fa-close': !report.didPass()
                           })
-                        }></i> {testCase.shortTitle()}
+                        }></i> {report.shortTitle()}
                       </li>
                     );
                   })
                 ) : (
-                  <p>No test cases were found in the current test suite</p>
+                  <p>No reports were found in the logs</p>
                 )
               }
             </ul>

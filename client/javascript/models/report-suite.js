@@ -1,17 +1,19 @@
+'use strict';
+
 import Report from './report';
 
-export default class TestSuite {
+export default class ReportSuite {
   constructor(logs) {
     this._logs = logs;
 
-    let cases = [];
+    let reports = [];
 
     let caseLog = null;
     logs.split('\n').map(function (line) {
       let match = line.match(/^\s*test [^\s]+ \.\.\./g);
       if (match) {
         if (caseLog) {
-          cases.push(new Report(caseLog.join('\n')));
+          reports.push(new Report(caseLog.join('\n')));
         }
         caseLog = [];
       }
@@ -22,16 +24,16 @@ export default class TestSuite {
 
       match = line.match(/(?:ok|fail)$/);
       if (match) {
-        cases.push(new Report(caseLog.join('\n')));
+        reports.push(new Report(caseLog.join('\n')));
         caseLog = null;
       }
     });
 
     if (caseLog) {
-      cases.push(new Report(caseLog.join('\n')));
+      reports.push(new Report(caseLog.join('\n')));
     }
 
-    this._cases = cases;
+    this._reports = reports;
   }
 
 
@@ -40,7 +42,7 @@ export default class TestSuite {
   }
 
 
-  testCases() {
-    return this._cases;
+  reports() {
+    return this._reports;
   }
 }

@@ -4,8 +4,8 @@ import React from 'react';
 import $ from 'jquery';
 
 import Store from './store';
-import TestCasesList from './components/test-cases-list.jsx';
-import TestSuite from './models/test-suite';
+import ReportList from './components/report-list.jsx';
+import ReportSuite from './models/report-suite';
 
 export default class Application extends React.Component {
   constructor() {
@@ -19,7 +19,7 @@ export default class Application extends React.Component {
     }
 
     this.state = {
-      testSuite: Store.create(TestSuite, logs)
+      reportSuite: Store.create(ReportSuite, logs)
     };
   }
 
@@ -31,7 +31,7 @@ export default class Application extends React.Component {
       url: '/sample-05-04-2015.log',
       success: function (result) {
         self.setState({
-          testSuite: Store.create(TestSuite, result)
+          reportSuite: Store.create(ReportSuite, result)
         });
       }
     });
@@ -46,7 +46,7 @@ export default class Application extends React.Component {
         </header>
 
         <main className="main-content">
-          <TestCasesList testSuite={this.state.testSuite} />
+          <ReportList reportSuite={this.state.reportSuite} />
         </main>
       </div>
     );
