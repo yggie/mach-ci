@@ -8,7 +8,7 @@ export default class Report {
     let self = this;
     self.fullLogs = logs;
     self.bodies = {};
-    self.snippets = [];
+    self._snippets = [];
 
     let currentStep = 0,
         snippet = [];
@@ -45,7 +45,7 @@ export default class Report {
       match = line.match(/\[Dynamics update\] START/);
       if (match) {
         if (currentStep !== 0) {
-          self.snippets.push(snippet.splice(0, snippet.length - 1).join('\n'));
+          self._snippets.push(snippet.splice(0, snippet.length - 1).join('\n'));
         }
         currentStep = currentStep + 1;
         return;
@@ -62,7 +62,7 @@ export default class Report {
       }
     });
 
-    self.snippets.push(snippet.join('\n'));
+    self._snippets.push(snippet.join('\n'));
     self.numberOfFrames = currentStep;
   }
 
@@ -76,6 +76,11 @@ export default class Report {
     return this._title.replace(/\w+::/g, function (match) {
       return match[0].toUpperCase() + ':';
     });
+  }
+
+
+  snippets() {
+    return this._snippets;
   }
 
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import ReportDetail from './report-detail.jsx';
+import ReportDetail from './report-detail/report-detail.jsx';
 
 export default class TestCasesList extends React.Component {
   componentWillMount() {

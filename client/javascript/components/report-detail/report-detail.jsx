@@ -4,8 +4,9 @@ import React from 'react';
 import THREE from 'three';
 import classNames from 'classnames';
 
-import ReportEntity from '../graphics/report-entity';
-import CameraController from '../graphics/camera-controller';
+import ReportEntity from '../../graphics/report-entity';
+import CameraController from '../../graphics/camera-controller';
+import ReportDetailLogs from './report-detail-logs.jsx';
 
 export default class ReportDetail extends React.Component {
   constructor() {
@@ -191,15 +192,10 @@ export default class ReportDetail extends React.Component {
           onMouseMove={this.canvasOnDrag.bind(this)}
           className={classNames({
             'hidden': !reportEntity.canRender
-          })}></canvas>
+          })}>
+        </canvas>
 
-          <pre className="logs">
-            {
-              reportEntity.snippets().map(function (snippet, index) {
-                return <div key={index}>{snippet}</div>;
-              })
-            }
-          </pre>
+        <ReportDetailLogs snippets={reportEntity.snippets()} scrollIndex={reportEntity.currentFrame} />
       </section>
     );
   }

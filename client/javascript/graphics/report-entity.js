@@ -59,7 +59,7 @@ export default class ReportEntity {
 
 
   snippets() {
-    return this._report ? this._report.snippets : [];
+    return this._report ? this._report._snippets : [];
   }
 
 

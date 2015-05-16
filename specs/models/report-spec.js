@@ -93,7 +93,7 @@ describe('Report model', function () {
 
       var myReport = report(logs);
       expect(myReport.numberOfFrames).to.equal(2);
-      expect(myReport.snippets.map(trim)).to.deep.equal([`
+      expect(myReport.snippets().map(trim)).to.deep.equal([`
         test core::state::tests::with_velocity_test ...
         [Collisions create_body] Body[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
         [Collisions create_body] Body[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
