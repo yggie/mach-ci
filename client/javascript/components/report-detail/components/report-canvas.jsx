@@ -5,7 +5,7 @@ import THREE from 'three';
 import classNames from 'classnames';
 
 import ReportEntity from '../../../graphics/report-entity';
-import CameraController from '../../../graphics/camera-controller';
+import OrbitCameraControlledCanvas from './orbit-camera-controlled-canvas.jsx';
 
 export default class ReportCanvas extends React.Component {
   constructor() {
@@ -31,8 +31,6 @@ export default class ReportCanvas extends React.Component {
       renderer: renderer,
       camera: camera,
       scene: scene,
-      enableCameraControl: false,
-      cameraController: new CameraController(camera),
       keepAnimating: true,
       reportEntity: new ReportEntity(this.props.report)
     }, function () {
@@ -90,60 +88,9 @@ export default class ReportCanvas extends React.Component {
   }
 
 
-  canvasOnMouseMove(event) {
-    let state = this.state;
-
-    if (state.enableCameraControl && event.altKey) {
-      let canvas = this.state.canvas;
-
-      var offset = { x: canvas.offsetLeft, y: canvas.offsetTop },
-          parent = canvas.offsetParent;
-
-      // the weirdness of HTML to get the relative position from the current
-      // element
-      while (parent) {
-        offset.x += parent.offsetLeft;
-        offset.y += parent.offsetTop;
-        parent = parent.offsetParent;
-      }
-
-      // we want to ensure the pixel scales of the two measures are equal
-      state.cameraController.nextRotationEvent({
-        x: (event.pageX - offset.x) / canvas.clientWidth,
-        y: (event.pageY - offset.y) / canvas.clientWidth
-      });
-    }
-  }
-
-
-  canvasOnKeyUp(event) {
-    if (event.key === 'Alt') {
-      this.endCameraControl();
-    }
-  }
-
-
-  canvasOnFocus() {
-    this.setState({
-      enableCameraControl: true
-    });
-  }
-
-
-  canvasOnBlur() {
-    this.endCameraControl();
-  }
-
-
-  endCameraControl() {
-    this.state.cameraController.endAllEvents();
-  }
-
-
   animate() {
     let canvas = this.state.canvas,
         camera = this.state.camera,
-        controller = this.state.cameraController,
         scene = this.state.scene,
         renderer = this.state.renderer,
         animate = this.animate.bind(this);
@@ -155,9 +102,6 @@ export default class ReportCanvas extends React.Component {
     }
 
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    // camera.matrixWorld = controller.viewMatrix();
-    // camera.matrixAutoUpdate = false;
-    controller.apply();
     // scene.updateMatrixWorld(true);
     // let translation = new THREE.Vector3(0, 0, 0);
     // camera.matrixWorld.decompose(translation, new THREE.Quaternion(), new THREE.Vector3());
@@ -168,20 +112,18 @@ export default class ReportCanvas extends React.Component {
 
 
   render() {
-    var reportScene = this.state.reportEntity;
+    var state = this.state,
+        reportScene = state.reportEntity,
+        camera = state.camera;
 
     return (
-      <canvas
+      <OrbitCameraControlledCanvas
         ref="canvas"
-        tabIndex="-1"
-        onFocus={this.canvasOnFocus.bind(this)}
-        onBlur={this.canvasOnBlur.bind(this)}
-        onKeyUp={this.canvasOnKeyUp.bind(this)}
-        onMouseMove={this.canvasOnMouseMove.bind(this)}
+        camera={camera}
         className={classNames({
           'hidden': !reportScene.canRender
         })}>
-      </canvas>
+      </OrbitCameraControlledCanvas>
     );
   }
 }
