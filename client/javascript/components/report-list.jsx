@@ -63,7 +63,7 @@ export default class ReportList extends React.Component {
 
           {
             (selectedReport) ? (
-              <ReportDetail selectedReport={selectedReport} />
+              <ReportDetail report={selectedReport} />
             ) : (
               <div className="report-detail">
                 <p>No report has been selected.</p>

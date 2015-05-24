@@ -2,16 +2,16 @@
 
 import React from 'react';
 
-export default class ReportDetailLogs extends React.Component {
+export default class ReportLogs extends React.Component {
   shouldComponentUpdate(nextProps) {
-    return this.props.scrollIndex !== nextProps.scrollIndex ||
+    return this.props.frame !== nextProps.frame ||
       this.props.snippets !== nextProps.snippets;
   }
 
   render() {
     let snippets = this.props.snippets,
-        scrollIndex = this.props.scrollIndex || 0,
-        snippetToRender = snippets[scrollIndex];
+        frame = this.props.frame || 0,
+        snippetToRender = snippets[frame];
 
     return (
       <pre className="logs">

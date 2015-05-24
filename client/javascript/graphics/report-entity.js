@@ -27,7 +27,7 @@ class BodyEntity {
       mesh.quaternion.copy(state.rot);
     } else {
       // TODO fix this hax
-      mesh.position.set(99999, 99999, 99999);
+      mesh.position.set(Infinity, Infinity, Infinity);
     }
   }
 }
