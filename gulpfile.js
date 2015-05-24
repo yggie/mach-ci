@@ -53,9 +53,7 @@
   var compileJsx = function (options) {
     return through2.obj(function (file, enc, next) {
       browserify(file.path, options)
-        .transform(babelify.configure({
-          sourceMapRelative: config.paths.base
-        }))
+        .transform(babelify)
         .bundle(function (err, res) {
           if (err) {
             return next(err);
@@ -125,11 +123,11 @@
     var filter = gulpFilter(['**/*.jsx']);
 
     return merge(clientDependencies(), jsx)
-      .pipe(sourcemaps.init())
       .pipe(filter)
         .pipe(compileJsx({ debug: true }))
         .on('error', notify.onError())
       .pipe(filter.restore())
+      .pipe(sourcemaps.init())
       .pipe(concat('javascript/application.js'))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.paths.dist))
