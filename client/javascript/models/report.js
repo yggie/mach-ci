@@ -63,7 +63,7 @@ export default class Report {
     });
 
     self._snippets.push(snippet.join('\n'));
-    self.numberOfFrames = currentStep;
+    self.numberOfFrames = currentStep || 1;
   }
 
 

@@ -10,7 +10,7 @@ export default class ReportLogs extends React.Component {
 
   render() {
     let snippets = this.props.snippets,
-        frame = this.props.frame || 0,
+        frame = this.props.frame,
         snippetToRender = snippets[frame];
 
     return (

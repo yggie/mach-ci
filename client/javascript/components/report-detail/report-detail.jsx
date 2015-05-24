@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import classNames from 'classnames';
 
 import ReportLogs from './components/report-logs.jsx';
 import ReportCanvas from './components/report-canvas.jsx';
@@ -19,9 +20,7 @@ export default class ReportDetail extends React.Component {
     this.setState({
       keepPlaying: true,
       currentFrame: 0
-    }, function () {
-      this.play();
-    }.bind(this));
+    }, this.play.bind(this));
   }
 
 
@@ -41,6 +40,21 @@ export default class ReportDetail extends React.Component {
   }
 
 
+  onSliderChange(event) {
+    this.setState({
+      currentFrame: parseInt(event.target.value),
+      keepPlaying: false
+    });
+  }
+
+
+  onSliderMouseUp() {
+    this.setState({
+      keepPlaying: true
+    }, this.play.bind(this));
+  }
+
+
   play() {
     let state = this.state,
         currentFrame = state.currentFrame,
@@ -57,16 +71,45 @@ export default class ReportDetail extends React.Component {
   }
 
 
+  onTogglePlay(event) {
+    if (event.key === ' ') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.setState({
+        keepPlaying: !this.state.keepPlaying
+      }, function () {
+        if (this.state.keepPlaying) {
+          this.play();
+        }
+      }.bind(this));
+    }
+  }
+
+
   render() {
     let report = this.props.report,
-        currentFrame = this.state.currentFrame;
+        numberOfFrames = report.numberOfFrames,
+        currentFrame = this.state.currentFrame || 0;
 
     return (
-      <section className="report-detail">
+      <section className="report-detail" onKeyUp={this.onTogglePlay.bind(this)}>
         <h1>{report.title()}</h1>
         <p>Status: {report.didPass() ? 'Success' : 'Fail'}</p>
 
-        <ReportCanvas report={report} frame={currentFrame} />
+        <ReportCanvas report={report} frame={currentFrame}/>
+
+        <div className={classNames({ 'hidden': report.numberOfFrames <= 1 })}>
+          <input className="canvas-slider"
+            type="range"
+            min="0"
+            max={numberOfFrames}
+            value={currentFrame}
+            onChange={this.onSliderChange.bind(this)}
+            onMouseUp={this.onSliderMouseUp.bind(this)} />
+
+          <p>Frame: {currentFrame} / {numberOfFrames}</p>
+        </div>
+
         <ReportLogs snippets={report.snippets()} frame={currentFrame} />
       </section>
     );
