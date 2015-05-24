@@ -25,7 +25,8 @@
           base: path.join(__dirname, '/client'),
           javascript: path.join(__dirname, '/client/javascript'),
           styles: path.join(__dirname, '/client/stylesheets'),
-          dist: path.join(__dirname, '/public/assets')
+          dist: path.join(__dirname, '/public/assets'),
+          build: path.join(__dirname, '/mithril-ci-offline')
         }
       };
 
@@ -80,7 +81,7 @@
 
   gulp.task('build', function () {
     var css = gulp.src(config.paths.styles + '/**/*.scss', {
-        base: config.paths.base
+        base: config.paths.styles
       })
       .pipe(compileSass())
       .pipe(minifyCss());
@@ -91,12 +92,12 @@
       .pipe(compileJsx());
 
     var js = merge(clientDependencies(), jsx)
-      .pipe(concat('javascript/application.js'))
+      .pipe(concat('application.js'))
       .pipe(uglify());
 
     return merge(css, js)
       .pipe(addMinExtension())
-      .pipe(gulp.dest(config.paths.dist));
+      .pipe(gulp.dest(config.paths.build));
   });
 
 
