@@ -140,6 +140,7 @@ export default class ReportDetail extends React.Component {
         entity = state.reportEntity;
 
     entity.setFrame((entity.currentFrame + 1) % entity.numberOfFrames);
+    this.forceUpdate();
 
     if (state.keepPlaying) {
       setTimeout(this.play.bind(this), 50);

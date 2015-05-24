@@ -1,25 +1,21 @@
 'use strict';
 
 import React from 'react';
-import classNames from 'classnames';
 
 export default class ReportDetailLogs extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return this.props.scrollIndex !== nextProps.scrollIndex ||
+      this.props.snippets !== nextProps.snippets;
+  }
+
   render() {
     let snippets = this.props.snippets,
-        scrollIndex = this.props.scrollIndex;
+        scrollIndex = this.props.scrollIndex || 0,
+        snippetToRender = snippets[scrollIndex];
 
     return (
       <pre className="logs">
-        {
-          snippets.map(function (snippet, index) {
-            return (
-              <div key={index}
-                  className={classNames({ 'current': index = scrollIndex })}>
-                {snippet}
-              </div>
-            );
-          })
-        }
+        { snippetToRender }
       </pre>
     );
   }
