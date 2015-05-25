@@ -26,7 +26,7 @@ export default class Report {
         self._title = match[1];
       }
 
-      match = line.match(/(ok|fail)$/);
+      match = line.match(/(ok|FAILED)$/);
       if (match) {
         self.result = match[1];
         return;
@@ -86,5 +86,10 @@ export default class Report {
 
   didPass() {
     return this.result === 'ok';
+  }
+
+
+  didFail() {
+    return this.result === 'FAILED';
   }
 }

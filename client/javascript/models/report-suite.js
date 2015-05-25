@@ -42,7 +42,17 @@ export default class ReportSuite {
   }
 
 
-  reports() {
-    return this._reports;
+  reports(filter) {
+    var reports = this._reports;
+
+    if (filter) {
+      if (typeof filter.result !== 'undefined') {
+        reports = reports.filter(function (report) {
+          return report.result === filter.result;
+        });
+      }
+    }
+
+    return reports;
   }
 }

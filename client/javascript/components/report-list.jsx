@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import classNames from 'classnames';
 
 import ReportDetail from './report-detail/report-detail.jsx';
 
@@ -15,19 +14,17 @@ export default class ReportList extends React.Component {
     this.selectReport(0);
   }
 
-  selectReport(reportIndex) {
-    let suite = this.props.reportSuite,
-        selectedReport = suite ? suite.reports()[reportIndex] : null;
-
-    this.setState({ selectedReport: selectedReport });
+  selectReport(report) {
+    this.setState({ selectedReport: report });
   }
 
   render() {
     var self = this,
         suite = self.props.reportSuite,
         selectedReport = self.state.selectedReport,
-        reports = suite ? suite.reports() : [],
-        numberOfReports = reports.length;
+        okReports = suite ? suite.reports({ result: 'ok' }) : [],
+        failedReports = suite ? suite.reports({ result: 'FAILED' }) : [],
+        numberOfReports = okReports.length + failedReports.length;
 
     return (
       <section>
@@ -39,23 +36,36 @@ export default class ReportList extends React.Component {
 
         <section className="card reports-detail-view">
           <aside className="reports-list">
+            <h3>Failed Tests</h3>
             <ul>
               {
                 (numberOfReports) ? (
-                  reports.map(function (report, index) {
+                  failedReports.map(function (report) {
                     return (
-                      <li onClick={self.selectReport.bind(self, index)} key={report.title()}>
-                        <i className={
-                          classNames('fa', {
-                            'fa-check': report.didPass(),
-                            'fa-close': !report.didPass()
-                          })
-                        }></i> {report.shortTitle()}
+                      <li onClick={self.selectReport.bind(self, report)} key={report.title()}>
+                        <i className="fa fa-close"></i> {report.shortTitle()}
                       </li>
                     );
                   })
                 ) : (
-                  <p>No reports were found in the logs</p>
+                  <p>No failures were reported</p>
+                )
+              }
+            </ul>
+
+            <h3>Passed Tests</h3>
+            <ul>
+              {
+                (okReports.length) ? (
+                  okReports.map(function (report) {
+                    return (
+                      <li onClick={self.selectReport.bind(self, report)} key={report.title()}>
+                        <i className="fa fa-check"></i> {report.shortTitle()}
+                      </li>
+                    );
+                  })
+                ) : (
+                  <p>No passes were reported</p>
                 )
               }
             </ul>
