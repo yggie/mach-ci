@@ -58,7 +58,10 @@
   min-height: 500px;
 
   canvas {
+    user-select: none;
+
     &:focus {
+      cursor: crosshair;
       outline: 0;
       box-shadow: 0 0 10px $blue;
     }

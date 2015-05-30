@@ -10,47 +10,44 @@ export default class OrbitCameraControlledCanvas extends React.Component {
     this._up = new THREE.Vector3(0.0, 1.0, 0.0);
     this._eye = new THREE.Vector3(0.0, 0.0, 5.0);
 
-    this._tempEye = this._eye.clone();
     this._baseAxis = new THREE.Vector3(0, 0, 1);
 
     this._rotAnchor = null;
   }
 
 
-  nextRotationEvent(event) {
+  nextRotationEvent(point) {
     if (this._rotAnchor) {
-      let controlPoint = new THREE.Vector2(event.x, event.y),
-          diff = controlPoint.clone().sub(this._rotAnchor),
-          length = diff.lengthSq();
+      let diff = point.clone().sub(this._rotAnchor),
+          length = diff.length(),
+          centerToEye = this._eye.clone().sub(this._center),
+          zView = centerToEye.clone().normalize(),
+          xView = this._up.clone().cross(zView).normalize(),
+          yView = zView.clone().cross(xView).normalize(),
+          axis = (xView.clone().multiplyScalar(diff.y).add(yView.clone().multiplyScalar(-diff.x))).normalize();
 
-      if (length > 0.00001) {
-        let centerToEye = this._eye.clone().sub(this._center),
-            zView = centerToEye.clone().normalize(),
-            xView = this._up.clone().cross(zView).normalize(),
-            yView = zView.clone().cross(xView).normalize(),
-            axis = (xView.multiplyScalar(diff.y).add(yView.multiplyScalar(diff.x))).multiplyScalar(-1).normalize();
-
-        this._tempEye.copy(centerToEye).applyAxisAngle(axis, 4 * length).add(this._center);
-      }
+      this._eye.copy(centerToEye).applyAxisAngle(axis, length / 100).add(this._center);
+      this._up.copy(yView);
+      this._rotAnchor.copy(point);
     } else {
-      this._rotAnchor = new THREE.Vector2(event.x, event.y);
+      this._rotAnchor = point;
     }
 
     let camera = this._camera;
 
-    camera.position.copy(this._tempEye);
-    // TODO this has a singularity somewhere which causes the tumble
-    camera.quaternion.setFromUnitVectors(
-      this._baseAxis,
-      this._tempEye.clone().sub(this._center).normalize()
-    );
+    camera.position.copy(this._eye);
+    camera.up.copy(this._up);
+    camera.lookAt(this._center);
   }
 
 
   endCameraControl() {
     // this._tempEye.copy(this._eye);
-    this._eye.copy(this._tempEye);
     this._rotAnchor = null;
+
+    this.setState({
+      enableCameraControl: false
+    });
   }
 
 
@@ -72,7 +69,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   canvasOnMouseMove(event) {
     let state = this.state;
 
-    if (state.enableCameraControl && event.altKey) {
+    if (state.enableCameraControl) {
       let canvas = this.state.canvas;
 
       var offset = { x: canvas.offsetLeft, y: canvas.offsetTop },
@@ -87,30 +84,18 @@ export default class OrbitCameraControlledCanvas extends React.Component {
       }
 
       // we want to ensure the pixel scales of the two measures are equal
-      this.nextRotationEvent({
-        x: (event.pageX - offset.x) / canvas.clientWidth,
-        y: (event.pageY - offset.y) / canvas.clientWidth
-      });
+      this.nextRotationEvent(new THREE.Vector2(
+        event.pageX - offset.x,
+        -(event.pageY - offset.y)
+      ));
     }
   }
 
 
-  canvasOnKeyUp(event) {
-    if (event.key === 'Alt') {
-      this.endCameraControl();
-    }
-  }
-
-
-  canvasOnFocus() {
+  startCameraControl() {
     this.setState({
       enableCameraControl: true
     });
-  }
-
-
-  canvasOnBlur() {
-    this.endCameraControl();
   }
 
 
@@ -120,9 +105,9 @@ export default class OrbitCameraControlledCanvas extends React.Component {
         ref="canvas"
         tabIndex="-1"
         className={this.props.className}
-        onFocus={this.canvasOnFocus.bind(this)}
-        onBlur={this.canvasOnBlur.bind(this)}
-        onKeyUp={this.canvasOnKeyUp.bind(this)}
+        onMouseDown={this.startCameraControl.bind(this)}
+        onMouseLeave={this.endCameraControl.bind(this)}
+        onMouseUp={this.endCameraControl.bind(this)}
         onMouseMove={this.canvasOnMouseMove.bind(this)}>
       </canvas>
     );

@@ -11,8 +11,12 @@ export default class ReportCanvas extends React.Component {
   constructor() {
     super();
 
+    let camera = new THREE.PerspectiveCamera(45, 1.0, 1, 100);
+    camera.position.set(0, 0, 5);
+
     this.state = {
-      reportEntity: new ReportEntity(null)
+      reportEntity: new ReportEntity(null),
+      camera: camera
     };
   }
 
@@ -23,13 +27,11 @@ export default class ReportCanvas extends React.Component {
           canvas: canvas,
           antialias: true
         }),
-        camera = new THREE.PerspectiveCamera(45, 1.0, 1, 100),
         scene = new THREE.Scene();
 
     this.setState({
       canvas: canvas,
       renderer: renderer,
-      camera: camera,
       scene: scene,
       keepAnimating: true,
       reportEntity: new ReportEntity(this.props.report)
@@ -74,11 +76,9 @@ export default class ReportCanvas extends React.Component {
     let element = React.findDOMNode(this),
         parent = element.parentElement,
         reportEntity = this.state.reportEntity,
-        camera = this.state.camera,
         scene = this.state.scene,
         renderer = this.state.renderer;
 
-    camera.position.set(0, 0, 5);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(parent.clientWidth, parent.clientWidth * 9 / 14);
 
