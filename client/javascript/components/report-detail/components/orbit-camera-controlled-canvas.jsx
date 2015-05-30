@@ -9,8 +9,9 @@ export default class OrbitCameraControlledCanvas extends React.Component {
     this._center = new THREE.Vector3(0.0, 0.0, 0.0);
     this._up = new THREE.Vector3(0.0, 1.0, 0.0);
     this._eye = new THREE.Vector3(0.0, 0.0, 5.0);
+    this._zView = (new THREE.Vector3().copy(this._eye).sub(this._center)).normalize();
 
-    this._baseAxis = new THREE.Vector3(0, 0, 1);
+    this._zoom = this._eye.length();
 
     this._rotAnchor = null;
   }
@@ -20,33 +21,52 @@ export default class OrbitCameraControlledCanvas extends React.Component {
     if (this._rotAnchor) {
       let diff = point.clone().sub(this._rotAnchor),
           length = diff.length(),
-          centerToEye = this._eye.clone().sub(this._center),
-          zView = centerToEye.clone().normalize(),
+          zView = this._zView.clone(),
           xView = this._up.clone().cross(zView).normalize(),
           yView = zView.clone().cross(xView).normalize(),
           axis = (xView.clone().multiplyScalar(diff.y).add(yView.clone().multiplyScalar(-diff.x))).normalize();
 
-      this._eye.copy(centerToEye).applyAxisAngle(axis, length / 100).add(this._center);
+      this._zView.applyAxisAngle(axis, length / 100).normalize();
       this._up.copy(yView);
       this._rotAnchor.copy(point);
     } else {
       this._rotAnchor = point;
     }
 
+    this.updateCamera();
+  }
+
+
+  nextZoomEvent(zoom) {
+    this._zoom *= (1.0 + zoom.y / 100.0);
+
+    this.updateCamera();
+  }
+
+
+  updateCamera() {
     let camera = this._camera;
 
-    camera.position.copy(this._eye);
+    camera.position.copy(this._zView.clone().multiplyScalar(this._zoom));
     camera.up.copy(this._up);
     camera.lookAt(this._center);
   }
 
 
   endCameraControl() {
-    // this._tempEye.copy(this._eye);
+    this.endRotationControl();
+
+    this.setState({
+      cameraControlEnabled: false
+    });
+  }
+
+
+  endRotationControl() {
     this._rotAnchor = null;
 
     this.setState({
-      enableCameraControl: false
+      rotationControlEnabled: false
     });
   }
 
@@ -54,7 +74,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   componentDidMount() {
     this.setState({
       canvas: React.findDOMNode(this.refs.canvas),
-      enableCameraControl: false
+      cameraControlEnabled: false
     });
   }
 
@@ -69,32 +89,34 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   canvasOnMouseMove(event) {
     let state = this.state;
 
-    if (state.enableCameraControl) {
-      let canvas = this.state.canvas;
-
-      var offset = { x: canvas.offsetLeft, y: canvas.offsetTop },
-          parent = canvas.offsetParent;
-
-      // the weirdness of HTML to get the relative position from the current
-      // element
-      while (parent) {
-        offset.x += parent.offsetLeft;
-        offset.y += parent.offsetTop;
-        parent = parent.offsetParent;
-      }
-
-      // we want to ensure the pixel scales of the two measures are equal
-      this.nextRotationEvent(new THREE.Vector2(
-        event.pageX - offset.x,
-        -(event.pageY - offset.y)
-      ));
+    if (state.cameraControlEnabled && state.rotationControlEnabled) {
+      this.nextRotationEvent(new THREE.Vector2(event.pageX, event.pageY));
     }
   }
 
 
-  startCameraControl() {
+  canvasOnWheel(event) {
+    let state = this.state;
+
+    if (state.cameraControlEnabled) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.nextZoomEvent(new THREE.Vector2(event.deltaX, event.deltaY));
+    }
+  }
+
+
+  enableCameraControls() {
     this.setState({
-      enableCameraControl: true
+      cameraControlEnabled: true
+    });
+  }
+
+
+  startRotationControls() {
+    this.setState({
+      rotationControlEnabled: true
     });
   }
 
@@ -105,10 +127,12 @@ export default class OrbitCameraControlledCanvas extends React.Component {
         ref="canvas"
         tabIndex="-1"
         className={this.props.className}
-        onMouseDown={this.startCameraControl.bind(this)}
+        onFocus={this.enableCameraControls.bind(this)}
+        onMouseDown={this.startRotationControls.bind(this)}
         onMouseLeave={this.endCameraControl.bind(this)}
-        onMouseUp={this.endCameraControl.bind(this)}
-        onMouseMove={this.canvasOnMouseMove.bind(this)}>
+        onMouseUp={this.endRotationControl.bind(this)}
+        onMouseMove={this.canvasOnMouseMove.bind(this)}
+        onWheel={this.canvasOnWheel.bind(this)}>
       </canvas>
     );
   }
