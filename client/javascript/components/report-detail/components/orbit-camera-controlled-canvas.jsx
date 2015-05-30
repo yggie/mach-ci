@@ -30,7 +30,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
       this._up.copy(yView);
       this._rotAnchor.copy(point);
     } else {
-      this._rotAnchor = point;
+      this._rotAnchor = point.clone();
     }
 
     this.updateCamera();
@@ -53,28 +53,9 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   }
 
 
-  endCameraControl() {
-    this.endRotationControl();
-
-    this.setState({
-      cameraControlEnabled: false
-    });
-  }
-
-
-  endRotationControl() {
-    this._rotAnchor = null;
-
-    this.setState({
-      rotationControlEnabled: false
-    });
-  }
-
-
   componentDidMount() {
     this.setState({
-      canvas: React.findDOMNode(this.refs.canvas),
-      cameraControlEnabled: false
+      canvas: React.findDOMNode(this.refs.canvas)
     });
   }
 
@@ -89,7 +70,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   canvasOnMouseMove(event) {
     let state = this.state;
 
-    if (state.cameraControlEnabled && state.rotationControlEnabled) {
+    if (state.focused && state.mouseContained && state.mouseDown) {
       this.nextRotationEvent(new THREE.Vector2(event.pageX, event.pageY));
     }
   }
@@ -98,7 +79,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   canvasOnWheel(event) {
     let state = this.state;
 
-    if (state.cameraControlEnabled) {
+    if (state.focused && state.mouseContained) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -107,16 +88,50 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   }
 
 
-  enableCameraControls() {
+  canvasOnFocus() {
     this.setState({
-      cameraControlEnabled: true
+      focused: true
     });
   }
 
 
-  startRotationControls() {
+  canvasOnBlur() {
+    this._rotAnchor = null;
+
     this.setState({
-      rotationControlEnabled: true
+      focused: false
+    });
+  }
+
+
+  canvasOnMouseEnter() {
+    this.setState({
+      mouseContained: true
+    });
+  }
+
+
+  canvasOnMouseLeave() {
+    this._rotAnchor = null;
+
+    this.setState({
+      mouseContained: false
+    });
+  }
+
+
+  canvasOnMouseUp() {
+    this._rotAnchor = null;
+
+    this.setState({
+      mouseDown: false
+    });
+  }
+
+
+  canvasOnMouseDown() {
+    this.setState({
+      mouseDown: true
     });
   }
 
@@ -127,10 +142,12 @@ export default class OrbitCameraControlledCanvas extends React.Component {
         ref="canvas"
         tabIndex="-1"
         className={this.props.className}
-        onFocus={this.enableCameraControls.bind(this)}
-        onMouseDown={this.startRotationControls.bind(this)}
-        onMouseLeave={this.endCameraControl.bind(this)}
-        onMouseUp={this.endRotationControl.bind(this)}
+        onFocus={this.canvasOnFocus.bind(this)}
+        onBlur={this.canvasOnBlur.bind(this)}
+        onMouseDown={this.canvasOnMouseDown.bind(this)}
+        onMouseEnter={this.canvasOnMouseEnter.bind(this)}
+        onMouseLeave={this.canvasOnMouseLeave.bind(this)}
+        onMouseUp={this.canvasOnMouseUp.bind(this)}
         onMouseMove={this.canvasOnMouseMove.bind(this)}
         onWheel={this.canvasOnWheel.bind(this)}>
       </canvas>
