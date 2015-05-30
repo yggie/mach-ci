@@ -24,7 +24,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
           zView = this._zView.clone(),
           xView = this._up.clone().cross(zView).normalize(),
           yView = zView.clone().cross(xView).normalize(),
-          axis = (xView.clone().multiplyScalar(diff.y).add(yView.clone().multiplyScalar(-diff.x))).normalize();
+          axis = (xView.clone().multiplyScalar(-diff.y).add(yView.clone().multiplyScalar(-diff.x))).normalize();
 
       this._zView.applyAxisAngle(axis, length / 100).normalize();
       this._up.copy(yView);
@@ -38,7 +38,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
 
 
   nextZoomEvent(zoom) {
-    this._zoom *= (1.0 + zoom.y / 100.0);
+    this._zoom *= (1.0 - zoom.y / 100.0);
 
     this.updateCamera();
   }
