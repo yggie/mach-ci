@@ -26,7 +26,7 @@
           javascript: path.join(__dirname, '/client/javascript'),
           styles: path.join(__dirname, '/client/stylesheets'),
           dist: path.join(__dirname, '/public/assets'),
-          build: path.join(__dirname, '/mithril-ci-offline')
+          build: path.join(__dirname, '/mach-ci-offline')
         }
       };
 

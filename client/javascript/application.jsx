@@ -42,7 +42,7 @@ export default class Application extends React.Component {
     return (
       <div>
         <header className="main-header">
-          <a href="/">Mithril CI v0.0.1</a>
+          <a href="/">Mach CI v0.0.1</a>
         </header>
 
         <main className="main-content">

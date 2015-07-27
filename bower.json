@@ -1,9 +1,9 @@
 {
-  "name": "mithril-ci",
+  "name": "mach-ci",
   "version": "0.0.1",
-  "homepage": "https://github.com/yggie/mithril-ci",
+  "homepage": "https://github.com/yggie/mach-ci",
   "authors": [
-    "Bryan Yap <bryan.yap@alliants.com>"
+    "Bryan Yap <bryan.yap.mh@gmail.com>"
   ],
   "license": "MIT",
   "ignore": [

@@ -1,21 +1,21 @@
 {
-  "name": "mithril-ci",
+  "name": "mach-ci",
   "version": "0.0.1",
-  "description": "Test browser for the mithril physics engine",
+  "description": "Test browser for the mach physics engine",
   "main": "gulpfile.js",
   "scripts": {
     "test": "karma start"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yggie/mithril-ci.git"
+    "url": "https://github.com/yggie/mach-ci.git"
   },
   "author": "Bryan Yap",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/yggie/mithril-ci/issues"
+    "url": "https://github.com/yggie/mach-ci/issues"
   },
-  "homepage": "https://github.com/yggie/mithril-ci",
+  "homepage": "https://github.com/yggie/mach-ci",
   "browserify": {
     "transform": [
       "browserify-shim"
