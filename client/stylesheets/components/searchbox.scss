@@ -1,0 +1,104 @@
+@import "../themes/colors";
+
+$collapsed-size: 40px;
+$color: #555;
+$anim-in-phase-1: 0.2s;
+$anim-in-phase-2: 0.3s;
+$anim-out-phase-1: 0.1s;
+$anim-out-phase-2: 0.1s;
+
+.searchbox {
+  position: relative;
+  color: $white;
+  width: $collapsed-size;
+  height: auto;
+  max-height: $collapsed-size;
+  background: transparent;
+  overflow: hidden;
+
+  transition: width $anim-out-phase-1 ease $anim-out-phase-1,
+              max-height $anim-out-phase-2 ease;
+
+  &.expanded {
+    width: 350px;
+    max-height: 200px;
+
+    transition: width $anim-in-phase-1 ease,
+                max-height $anim-in-phase-2 ease $anim-in-phase-1;
+  }
+}
+
+.searchbox-field {
+  position: relative;
+  overflow: hidden;
+  height: $collapsed-size;
+  width: 100%;
+  min-width: $collapsed-size;
+  background: transparent;
+
+  .searchbox-query {
+    color: $white;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 10px ($collapsed-size + 10px) 10px;
+    border: none;
+    outline: none;
+    background: $color;
+    font-size: 16px;
+
+    &::placeholder {
+      color: $white;
+    }
+  }
+
+  .searchbox-field-submit,
+  .searchbox-field-icon {
+    width: $collapsed-size;
+    height: $collapsed-size;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    line-height: $collapsed-size;
+    text-align: center;
+    cursor: pointer;
+    background: $color;
+  }
+
+  .searchbox-field-submit {
+    color: transparent;
+    border: none;
+    outline: none;
+    z-index: -1;
+  }
+}
+
+input[type="search"].searchbox-query {
+  -webkit-appearance: none;
+  border-radius: 0;
+
+  &:focus {
+    color: $white;
+  }
+}
+
+.searchbox-options {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: $color;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  .searchbox-options-item {
+    cursor: pointer;
+    padding: 10px;
+    margin: 0;
+
+    &:hover {
+      background: darken($color, 10%);
+    }
+  }
+}

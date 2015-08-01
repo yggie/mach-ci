@@ -4,7 +4,7 @@ import React from 'react';
 import THREE from 'three';
 import classNames from 'classnames';
 
-import ReportEntity from '../../../graphics/report-entity';
+import ReportEntity from '../../graphics/report-entity';
 import OrbitCameraControlledCanvas from './orbit-camera-controlled-canvas.jsx';
 
 export default class ReportCanvas extends React.Component {
@@ -73,14 +73,15 @@ export default class ReportCanvas extends React.Component {
 
 
   prepareToAnimate() {
-    let element = React.findDOMNode(this),
-        parent = element.parentElement,
-        reportEntity = this.state.reportEntity,
-        scene = this.state.scene,
-        renderer = this.state.renderer;
+    let reportEntity = this.state.reportEntity;
+    let scene = this.state.scene;
+
+    let element = React.findDOMNode(this);
+    let parent = element.parentElement;
+    let renderer = this.state.renderer;
 
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(parent.clientWidth, parent.clientWidth * 9 / 14);
+    renderer.setSize(parent.clientWidth, parent.clientHeight);
 
     reportEntity.bodies.forEach(function (body) {
       scene.add(body.mesh);

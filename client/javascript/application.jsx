@@ -3,23 +3,21 @@
 import React from 'react';
 import $ from 'jquery';
 
-import Store from './store';
-import ReportList from './components/report-list.jsx';
-import ReportSuite from './models/report-suite';
+import Searchbox from './components/searchbox.jsx';
+import ReportViewer from './components/report-viewer.jsx';
+import parseLogs from './parse-logs';
 
 export default class Application extends React.Component {
   constructor() {
     super();
 
-    let logsElement = document.getElementById('logs'),
-        logs = '';
-
-    if (logsElement) {
-      logs = logsElement.innerText || '';
-    }
+    let $logs = $('#logs');
+    let logs = $logs.length ? ($logs[0].innerText || '') : '';
 
     this.state = {
-      reportSuite: Store.create(ReportSuite, logs)
+      logs: logs,
+      reports: [],
+      selectedReport: null
     };
   }
 
@@ -29,26 +27,61 @@ export default class Application extends React.Component {
 
     $.ajax({
       url: '/sample-01-08-2015.log',
-      success: function (result) {
+      success: function (newLogs) {
         self.setState({
-          reportSuite: Store.create(ReportSuite, result)
+          logs: newLogs
         });
       }
     });
   }
 
 
+  shouldComponentUpdate(newProps, newState) {
+    let shouldUpdate = false;
+    let state = this.state;
+    if (newState.logs !== state.logs) {
+      shouldUpdate = true;
+
+      let reports = parseLogs(newState.logs);
+      this.setState({
+        reports: reports,
+        selectedReport: reports[0]
+      });
+    }
+
+    if (newState.reports !== state.reports ||
+        newState.selectedReport !== state.selectedReport) {
+      shouldUpdate = true;
+    }
+
+    return shouldUpdate;
+  }
+
+
+  onReportSelected(report) {
+    this.setState({
+      selectedReport: report
+    });
+  }
+
+
   render() {
     return (
-      <div>
+      <main className="main-content">
         <header className="main-header">
-          <a href="/">Mach CI v0.0.1</a>
+          <Searchbox className="main-searchbox"
+            reports={this.state.reports}
+            onSelectReport={this.onReportSelected.bind(this)} />
         </header>
 
-        <main className="main-content">
-          <ReportList reportSuite={this.state.reportSuite} />
-        </main>
-      </div>
+        {(
+          (this.state.selectedReport) ? (
+            <ReportViewer report={this.state.selectedReport} />
+          ) : (
+            <p>No report has been selected</p>
+          )
+        )}
+      </main>
     );
   }
 }

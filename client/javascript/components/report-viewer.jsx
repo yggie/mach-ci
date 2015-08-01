@@ -3,10 +3,10 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import ReportLogs from './components/report-logs.jsx';
-import ReportCanvas from './components/report-canvas.jsx';
+import ReportLogs from './report-viewer/report-logs.jsx';
+import ReportCanvas from './report-viewer/report-canvas.jsx';
 
-export default class ReportDetail extends React.Component {
+export default class ReportViewer extends React.Component {
   constructor() {
     super();
 
@@ -92,13 +92,10 @@ export default class ReportDetail extends React.Component {
         currentFrame = this.state.currentFrame || 0;
 
     return (
-      <section className="report-detail" onKeyUp={this.onTogglePlay.bind(this)}>
-        <h1>{report.title()}</h1>
-        <p>Status: {report.didPass() ? 'Success' : 'Fail'}</p>
-
+      <div className="canvas-wrapper">
         <ReportCanvas report={report} frame={currentFrame}/>
 
-        <div className={classNames({ 'hidden': report.numberOfFrames <= 1 })}>
+        <div className="control-box">
           <input className="canvas-slider"
             type="range"
             min="0"
@@ -107,11 +104,11 @@ export default class ReportDetail extends React.Component {
             onChange={this.onSliderChange.bind(this)}
             onMouseUp={this.onSliderMouseUp.bind(this)} />
 
-          <p>Frame: {currentFrame} / {numberOfFrames}</p>
+          <ReportLogs className="report-logs"
+            snippets={report.snippets()}
+            frame={currentFrame} />
         </div>
-
-        <ReportLogs snippets={report.snippets()} frame={currentFrame} />
-      </section>
+      </div>
     );
   }
 }

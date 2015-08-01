@@ -32,7 +32,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[Collisions create_body\] Body\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
+      match = line.match(/\[CREATE\] Body\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);
@@ -42,7 +42,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[Dynamics update\] START/);
+      match = line.match(/\[UPDATE\] START/);
       if (match) {
         if (currentStep !== 0) {
           self._snippets.push(snippet.splice(0, snippet.length - 1).join('\n'));
@@ -51,7 +51,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[Dynamics update\] Body\[(.+)\]: Pos=(.+), Rot=(.+)/);
+      match = line.match(/\[UPDATE\] Body\[(.+)\]: Pos=(.+), Rot=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);

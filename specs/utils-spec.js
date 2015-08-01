@@ -1,10 +1,10 @@
 /* global THREE:false */
 
+'use strict';
+
 import * as utils from '../client/javascript/utils';
 
 describe('utils module', function () {
-  'use strict';
-
   it('can convert a stringified array to a numeric array', function () {
     expect(utils.parseNumericArray(' [-1, 2, 3, -4.01  ]')).to
       .deep.equal([ -1,2, 3, -4.01 ]);

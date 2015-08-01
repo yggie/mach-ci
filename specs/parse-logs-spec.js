@@ -1,8 +1,8 @@
 'use strict';
 
-import ReportSuite from '../../client/javascript/models/report-suite';
+import parseLogs from '../client/javascript/parse-logs';
 
-describe('ReportSuite model', function () {
+describe('parseLogs', function () {
   let logs = function () {
     return `
            Running target/debug/lib-a8870084aab755f9
@@ -21,15 +21,8 @@ describe('ReportSuite model', function () {
   };
 
 
-  it('has a copy of the original logs', function () {
-    let suite = new ReportSuite(logs());
-    expect(suite.logs()).to.equal(logs());
-  });
-
-
-  it('only captures fully simulated reports', function () {
-    let suite = new ReportSuite(logs()),
-        reports = suite.reports();
+  it('instantiates renderable report instances from the logs', function () {
+    let reports = parseLogs(logs());
 
     expect(reports.length).to.equal(1);
     expect(reports[0].title()).to.equal('tests::renderable_test');

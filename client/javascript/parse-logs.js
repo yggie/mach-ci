@@ -1,11 +1,8 @@
 'use strict';
 
-import Report from './report';
+import Report from './models/report';
 
-export default class ReportSuite {
-  constructor(logs) {
-    this._logs = logs;
-
+export default function (logs) {
     let reports = [];
 
     let caseLog = null;
@@ -39,26 +36,5 @@ export default class ReportSuite {
       reports.push(new Report(caseLog.join('\n')));
     }
 
-    this._reports = reports;
-  }
-
-
-  logs() {
-    return this._logs;
-  }
-
-
-  reports(filter) {
-    var reports = this._reports;
-
-    if (filter) {
-      if (typeof filter.result !== 'undefined') {
-        reports = reports.filter(function (report) {
-          return report.result === filter.result;
-        });
-      }
-    }
-
     return reports;
-  }
-}
+};
