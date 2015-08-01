@@ -28,7 +28,7 @@ export default class Application extends React.Component {
     var self = this;
 
     $.ajax({
-      url: '/sample-05-04-2015.log',
+      url: '/sample-01-08-2015.log',
       success: function (result) {
         self.setState({
           reportSuite: Store.create(ReportSuite, result)

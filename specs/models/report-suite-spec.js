@@ -7,12 +7,16 @@ describe('ReportSuite model', function () {
     return `
            Running target/debug/lib-a8870084aab755f9
 
-      running 3 test
+      running 5 test
       test tests::some_test ... ok
       test tests::some_other_test ... ok
+      test tests::just_another_test ... abc
+      ok
+      test tests::renderable_test ... [NEW_SIMULATION]
+      ok
       test tests::another_test ... fail
 
-      test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured
+      test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured
     `;
   };
 
@@ -23,13 +27,11 @@ describe('ReportSuite model', function () {
   });
 
 
-  it('has all the reports present in the logs', function () {
+  it('only captures fully simulated reports', function () {
     let suite = new ReportSuite(logs()),
         reports = suite.reports();
 
-    expect(reports.length).to.equal(3);
-    expect(reports[0].title()).to.equal('tests::some_test');
-    expect(reports[1].title()).to.equal('tests::some_other_test');
-    expect(reports[2].title()).to.equal('tests::another_test');
+    expect(reports.length).to.equal(1);
+    expect(reports[0].title()).to.equal('tests::renderable_test');
   });
 });

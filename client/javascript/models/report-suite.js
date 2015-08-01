@@ -9,27 +9,33 @@ export default class ReportSuite {
     let reports = [];
 
     let caseLog = null;
-    logs.split('\n').map(function (line) {
-      let match = line.match(/^\s*test [^\s]+ \.\.\./g);
+    logs.split('\n').forEach(function (line) {
+      let regex = /^\s*test [^\s]+ \.\.\.(.*)$/g;
+      let match = regex.exec(line);
       if (match) {
-        if (caseLog) {
+        if (caseLog && caseLog.length > 0) {
           reports.push(new Report(caseLog.join('\n')));
         }
+
+        if (match[1] !== ' [NEW_SIMULATION]') {
+          caseLog = null;
+          return;
+        }
+
         caseLog = [];
       }
 
       if (caseLog) {
         caseLog.push(line);
-      }
 
-      match = line.match(/(?:ok|fail)$/);
-      if (match) {
-        reports.push(new Report(caseLog.join('\n')));
-        caseLog = null;
+        if (line === 'ok' || line === 'fail') {
+          reports.push(new Report(caseLog.join('\n')));
+          caseLog = null;
+        }
       }
     });
 
-    if (caseLog) {
+    if (caseLog && caseLog.length > 0) {
       reports.push(new Report(caseLog.join('\n')));
     }
 
