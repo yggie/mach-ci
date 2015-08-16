@@ -17,6 +17,9 @@ export default class ReportViewer extends React.Component {
 
 
   componentDidMount() {
+    window.addEventListener('keyup', this.onKeyUp);
+    window.addEventListener('keydown', this.onKeyDown);
+
     this.setState({
       playing: true,
       currentFrame: 0
@@ -34,8 +37,16 @@ export default class ReportViewer extends React.Component {
 
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.playing && !prevState.playing) {
+    let state = this.state;
+
+    if (state.playing && !prevState.playing) {
       this.play();
+    } else if (!state.playing && state.timeout) {
+      clearTimeout(state.timeout);
+
+      this.setState({
+        timeout: null
+      });
     }
   }
 
@@ -48,22 +59,21 @@ export default class ReportViewer extends React.Component {
 
 
   onSliderChange = (event) => {
+    let state = this.state;
+    let wasPlaying = (state.sliderActive) ? state.wasPlayingBeforeSlider : state.playing;
+
     this.setState({
       currentFrame: parseInt(event.target.value, 10),
+      wasPlayingBeforeSlider: wasPlaying,
+      sliderActive: true,
       playing: false
-    });
-  }
-
-
-  onSliderMouseDown = () => {
-    this.setState({
-      wasPlayingBeforeSlider: this.state.playing
     });
   }
 
 
   onSliderMouseUp = () => {
     this.setState({
+      sliderActive: false,
       playing: this.state.wasPlayingBeforeSlider
     });
   }
@@ -74,22 +84,46 @@ export default class ReportViewer extends React.Component {
       this.setState({
         playing: !this.state.playing
       });
+
+      return false;
     }
+
+    return true;
+  }
+
+
+  onKeyDown = (event) => {
+    switch (event.keyCode) {
+      case 37: // left arrow
+        this.setFrame(this.state.currentFrame - 1 + this.props.report.numberOfFrames);
+        break;
+
+      case 39: // right arrow
+        this.setFrame(this.state.currentFrame + 1);
+        break;
+
+      default:
+        return true;
+    }
+
+    return false;
+  }
+
+
+  setFrame(frame) {
+    this.setState({
+      currentFrame: frame % this.props.report.numberOfFrames
+    });
   }
 
 
   play = () => {
-    let state = this.state,
-        currentFrame = state.currentFrame,
-        report = this.props.report,
-        frame = (currentFrame + 1) % report.numberOfFrames;
+    this.setFrame(this.state.currentFrame + 1);
 
-    this.setState({
-      currentFrame: frame
-    });
-
-    if (state.playing) {
-      setTimeout(this.play, 50);
+    if (this.state.playing) {
+      this.setState({
+        timeout: setTimeout(this.play, 50)
+      });
     }
   }
 
@@ -112,7 +146,7 @@ export default class ReportViewer extends React.Component {
 
     return (
       <div className="canvas-wrapper"
-        onKeyUp={this.onKeyUp}>
+        ref="wrapper">
         <ReportCanvas report={report} frame={currentFrame}/>
 
         <div className="control-box">
@@ -122,7 +156,6 @@ export default class ReportViewer extends React.Component {
             max={numberOfFrames}
             value={currentFrame}
             onChange={this.onSliderChange}
-            onMouseDown={this.onSliderMouseDown}
             onMouseUp={this.onSliderMouseUp} />
 
           <ReportLogs className="report-logs"
