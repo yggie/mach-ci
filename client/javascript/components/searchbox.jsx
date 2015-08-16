@@ -17,6 +17,13 @@ export default class Searchbox extends React.Component {
   }
 
 
+  componentDidMount() {
+    this.setState({
+      filteredReports: this.filter(this.props.reports, this.state.query)
+    });
+  }
+
+
   componentWillReceiveProps(newProps) {
     this.setState({
       filteredReports: this.filter(newProps.reports, this.state.query)

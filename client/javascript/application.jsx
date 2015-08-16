@@ -18,10 +18,17 @@ export default class Application extends React.Component {
       logs = logsElement.innerText || '';
     }
 
-    this.state = {
+    this.state = this.stateWithLogs(logs);
+  }
+
+
+  stateWithLogs(logs) {
+    let reports = parseLogs(logs);
+
+    return {
       logs: logs,
-      reports: [],
-      selectedReport: null
+      reports: reports,
+      selectedReport: reports[0]
     };
   }
 
@@ -45,12 +52,7 @@ export default class Application extends React.Component {
     let state = this.state;
     if (newState.logs !== state.logs) {
       shouldUpdate = true;
-
-      let reports = parseLogs(newState.logs);
-      this.setState({
-        reports: reports,
-        selectedReport: reports[0]
-      });
+      this.setState(this.stateWithLogs(newState.logs));
     }
 
     if (newState.reports !== state.reports ||
