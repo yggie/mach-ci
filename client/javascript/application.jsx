@@ -26,7 +26,7 @@ export default class Application extends React.Component {
     var self = this;
 
     $.ajax({
-      url: '/sample-01-08-2015.log',
+      url: '/sample-16-08-2015.log',
       success: function (newLogs) {
         self.setState({
           logs: newLogs
