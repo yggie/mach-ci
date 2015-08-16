@@ -53,7 +53,9 @@
   var compileJsx = function (options) {
     return through2.obj(function (file, enc, next) {
       browserify(file.path, options)
-        .transform(babelify)
+        .transform(babelify.configure({
+          stage: 0,
+        }))
         .bundle(function (err, res) {
           if (err) {
             return next(err);

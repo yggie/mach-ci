@@ -43,7 +43,7 @@ module.exports = function (config) {
 
     browserify: {
       debug: true,
-      transform: ['babelify']
+      transform: [['babelify', { stage: 0 }]]
     },
 
 

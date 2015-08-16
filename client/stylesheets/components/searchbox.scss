@@ -48,7 +48,7 @@ $anim-out-phase-2: 0.1s;
     font-size: 16px;
 
     &::placeholder {
-      color: $white;
+      color: darken($white, 30%);
     }
   }
 

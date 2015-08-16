@@ -40,26 +40,49 @@ describe('Report model', function () {
   });
 
 
+  it('records all created static bodies', function () {
+    let logs = `
+      test core::state::tests::with_velocity_test ...
+      [CREATE] StaticBody[3]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      ok
+    `;
+
+    let bodyIds = Object.keys(report(logs).bodies);
+    expect(bodyIds).to.deep.equal(['3']);
+  });
+
+
   it('records the body states', function () {
     let logs = `
       test core::state::tests::with_velocity_test ...
       [CREATE] Body[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      [CREATE] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
       [UPDATE] START step=0.2
       [UPDATE] Body[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
+      [UPDATE] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0]
       [UPDATE] END
       ok
     `;
 
-    let currentBody = report(logs).bodies[1];
-    expect(currentBody.states.length).to.equal(2);
+    let bodies = report(logs).bodies;
+    expect(bodies[1].states.length).to.equal(2);
+    expect(bodies[2].states.length).to.equal(2);
 
-    currentBody.useState(0);
-    expect(currentBody.position.toArray()).to.deep.equal([0, 0, 0]);
-    expect(currentBody.rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
+    bodies[1].useState(0);
+    expect(bodies[1].position.toArray()).to.deep.equal([0, 0, 0]);
+    expect(bodies[1].rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
 
-    currentBody.useState(1);
-    expect(currentBody.position.toArray()).to.deep.equal([-0.178571, 0, 0]);
-    expect(currentBody.rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
+    bodies[1].useState(1);
+    expect(bodies[1].position.toArray()).to.deep.equal([-0.178571, 0, 0]);
+    expect(bodies[1].rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
+
+    bodies[2].useState(0);
+    expect(bodies[2].position.toArray()).to.deep.equal([0, 1, 0]);
+    expect(bodies[2].rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
+
+    bodies[2].useState(1);
+    expect(bodies[2].position.toArray()).to.deep.equal([0, 1, 0]);
+    expect(bodies[2].rotation.toArray()).to.deep.equal([0, 0, 0, 1]);
   });
 
 

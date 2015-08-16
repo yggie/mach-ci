@@ -67,51 +67,35 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   }
 
 
-  canvasOnMouseMove(event) {
+  canvasOnMouseMove = (event) => {
     let state = this.state;
 
-    if (state.focused && state.mouseContained && state.mouseDown) {
+    if (state.mouseContained && state.mouseDown) {
       this.nextRotationEvent(new THREE.Vector2(event.pageX, event.pageY));
     }
   }
 
 
-  canvasOnWheel(event) {
+  canvasOnWheel = (event) => {
     let state = this.state;
 
-    if (state.focused && state.mouseContained) {
+    if (state.mouseContained) {
       event.preventDefault();
       event.stopPropagation();
 
-      this.nextZoomEvent(new THREE.Vector2(event.deltaX, event.deltaY));
+      this.nextZoomEvent(new THREE.Vector2(event.deltaX, -event.deltaY));
     }
   }
 
 
-  canvasOnFocus() {
-    this.setState({
-      focused: true
-    });
-  }
-
-
-  canvasOnBlur() {
-    this._rotAnchor = null;
-
-    this.setState({
-      focused: false
-    });
-  }
-
-
-  canvasOnMouseEnter() {
+  canvasOnMouseEnter = () => {
     this.setState({
       mouseContained: true
     });
   }
 
 
-  canvasOnMouseLeave() {
+  canvasOnMouseLeave = () => {
     this._rotAnchor = null;
 
     this.setState({
@@ -120,7 +104,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   }
 
 
-  canvasOnMouseUp() {
+  canvasOnMouseUp = () => {
     this._rotAnchor = null;
 
     this.setState({
@@ -129,7 +113,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   }
 
 
-  canvasOnMouseDown() {
+  canvasOnMouseDown = () => {
     this.setState({
       mouseDown: true
     });
@@ -142,14 +126,12 @@ export default class OrbitCameraControlledCanvas extends React.Component {
         ref="canvas"
         tabIndex="-1"
         className={this.props.className}
-        onFocus={this.canvasOnFocus.bind(this)}
-        onBlur={this.canvasOnBlur.bind(this)}
-        onMouseDown={this.canvasOnMouseDown.bind(this)}
-        onMouseEnter={this.canvasOnMouseEnter.bind(this)}
-        onMouseLeave={this.canvasOnMouseLeave.bind(this)}
-        onMouseUp={this.canvasOnMouseUp.bind(this)}
-        onMouseMove={this.canvasOnMouseMove.bind(this)}
-        onWheel={this.canvasOnWheel.bind(this)}>
+        onMouseDown={this.canvasOnMouseDown}
+        onMouseEnter={this.canvasOnMouseEnter}
+        onMouseLeave={this.canvasOnMouseLeave}
+        onMouseUp={this.canvasOnMouseUp}
+        onMouseMove={this.canvasOnMouseMove}
+        onWheel={this.canvasOnWheel}>
       </canvas>
     );
   }

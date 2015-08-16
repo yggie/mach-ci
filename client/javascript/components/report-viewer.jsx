@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import classNames from 'classnames';
 
 import ReportLogs from './report-viewer/report-logs.jsx';
 import ReportCanvas from './report-viewer/report-canvas.jsx';
@@ -40,15 +39,15 @@ export default class ReportViewer extends React.Component {
   }
 
 
-  onSliderChange(event) {
+  onSliderChange = (event) => {
     this.setState({
-      currentFrame: parseInt(event.target.value),
+      currentFrame: parseInt(event.target.value, 10),
       keepPlaying: false
     });
   }
 
 
-  onSliderMouseUp() {
+  onSliderMouseUp = () => {
     this.setState({
       keepPlaying: true
     }, this.play.bind(this));
@@ -101,8 +100,8 @@ export default class ReportViewer extends React.Component {
             min="0"
             max={numberOfFrames}
             value={currentFrame}
-            onChange={this.onSliderChange.bind(this)}
-            onMouseUp={this.onSliderMouseUp.bind(this)} />
+            onChange={this.onSliderChange}
+            onMouseUp={this.onSliderMouseUp} />
 
           <ReportLogs className="report-logs"
             snippets={report.snippets()}
