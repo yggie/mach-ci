@@ -11,8 +11,12 @@ export default class Application extends React.Component {
   constructor() {
     super();
 
-    let $logs = $('#logs');
-    let logs = $logs.length ? ($logs[0].innerText || '') : '';
+    let logsElement = document.getElementById('logs'),
+        logs = '';
+
+    if (logsElement) {
+      logs = logsElement.innerText || '';
+    }
 
     this.state = {
       logs: logs,
