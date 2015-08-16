@@ -33,7 +33,7 @@ export default class Searchbox extends React.Component {
   }
 
 
-  onQueryChange(event) {
+  onQueryChange = (event) => {
     let query = event.target.value;
     this.setState({
       query: query,
@@ -57,30 +57,26 @@ export default class Searchbox extends React.Component {
 
 
   onSelectReport(report) {
-    let self = this;
-
-    return function () {
-      if (self.props.onSelectReport) {
-        self.setState({ className: CLASSNAME_COLLAPSED })
-        self.props.onSelectReport.call(null, report);
-      }
-    };
+    if (this.props.onSelectReport) {
+      this.setState({ className: CLASSNAME_COLLAPSED });
+      this.props.onSelectReport.call(null, report);
+    }
   }
 
 
-  onKeyDown(event) {
+  onKeyDown = (event) => {
     if (event.keyCode === 27) { // ESC
       this.setState( { className: CLASSNAME_COLLAPSED });
     }
   }
 
 
-  onMouseOver() {
+  onMouseOver = () => {
     this.setState({ className: CLASSNAME_EXPANDED });
   }
 
 
-  onMouseOut() {
+  onMouseOut = () => {
     this.setState({ className: CLASSNAME_COLLAPSED });
   }
 
@@ -90,16 +86,16 @@ export default class Searchbox extends React.Component {
 
     return (
       <div className={self.state.className + (self.props.className || '')}
-        onMouseOver={self.onMouseOver.bind(self)}
-        onMouseOut={self.onMouseOut.bind(self)}
-        onKeyDown={self.onKeyDown.bind(self)}>
+        onMouseOver={self.onMouseOver}
+        onMouseOut={self.onMouseOut}
+        onKeyDown={self.onKeyDown}>
 
         <div className="searchbox-field">
           <form autoComplete="off">
             <input className="searchbox-query"
               type="search"
               name="query"
-              onChange={self.onQueryChange.bind(self)}
+              onChange={self.onQueryChange}
               placeholder="Search reports by name..."/>
             <input className="searchbox-field-submit" type="submit" value=""/>
             <span className="fa fa-search searchbox-field-icon"></span>
@@ -109,10 +105,9 @@ export default class Searchbox extends React.Component {
         <ul className="searchbox-options">
           {
             self.state.filteredReports.map(function (report) {
-              // TODO probably could avoid creating functions this much
               return (
                 <li className="searchbox-options-item"
-                  onClick={self.onSelectReport(report)}>
+                  onClick={self.onSelectReport.bind(self, report)}>
                   {report.shortTitle()}
                 </li>
               );

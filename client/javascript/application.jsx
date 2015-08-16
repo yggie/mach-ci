@@ -58,7 +58,7 @@ export default class Application extends React.Component {
   }
 
 
-  onReportSelected(report) {
+  onReportSelected = (report) => {
     this.setState({
       selectedReport: report
     });
@@ -71,7 +71,7 @@ export default class Application extends React.Component {
         <header className="main-header">
           <Searchbox className="main-searchbox"
             reports={this.state.reports}
-            onSelectReport={this.onReportSelected.bind(this)} />
+            onSelectReport={this.onReportSelected} />
         </header>
 
         {(

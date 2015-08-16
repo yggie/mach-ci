@@ -56,7 +56,7 @@ export default class ReportCanvas extends React.Component {
 
       this.setState({
         reportEntity: new ReportEntity(nextProps.report)
-      }, this.prepareToAnimate.bind(this));
+      }, this.prepareToAnimate);
     }
 
     if (nextProps.frame !== props.frame) {
@@ -72,7 +72,7 @@ export default class ReportCanvas extends React.Component {
   }
 
 
-  prepareToAnimate() {
+  prepareToAnimate = () => {
     let reportEntity = this.state.reportEntity;
     let scene = this.state.scene;
 
@@ -89,12 +89,12 @@ export default class ReportCanvas extends React.Component {
   }
 
 
-  animate() {
+  animate = () => {
     let canvas = this.state.canvas,
         camera = this.state.camera,
         scene = this.state.scene,
         renderer = this.state.renderer,
-        animate = this.animate.bind(this);
+        animate = this.animate;
 
     if (this.state.keepAnimating) {
       setTimeout(function () {

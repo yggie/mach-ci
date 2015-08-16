@@ -19,7 +19,7 @@ export default class ReportViewer extends React.Component {
     this.setState({
       keepPlaying: true,
       currentFrame: 0
-    }, this.play.bind(this));
+    }, this.play);
   }
 
 
@@ -50,11 +50,11 @@ export default class ReportViewer extends React.Component {
   onSliderMouseUp = () => {
     this.setState({
       keepPlaying: true
-    }, this.play.bind(this));
+    }, this.play);
   }
 
 
-  play() {
+  play = () => {
     let state = this.state,
         currentFrame = state.currentFrame,
         report = this.props.report,
@@ -65,7 +65,7 @@ export default class ReportViewer extends React.Component {
     });
 
     if (state.keepPlaying) {
-      setTimeout(this.play.bind(this), 50);
+      setTimeout(this.play, 50);
     }
   }
 
