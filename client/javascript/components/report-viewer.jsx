@@ -10,16 +10,17 @@ export default class ReportViewer extends React.Component {
     super();
 
     this.state = {
-      currentFrame: 0
+      currentFrame: 0,
+      playing: false
     };
   }
 
 
   componentDidMount() {
     this.setState({
-      keepPlaying: true,
+      playing: true,
       currentFrame: 0
-    }, this.play);
+    });
   }
 
 
@@ -32,9 +33,16 @@ export default class ReportViewer extends React.Component {
   }
 
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.playing && !prevState.playing) {
+      this.play();
+    }
+  }
+
+
   componentWillUnmount() {
     this.setState({
-      keepPlaying: false
+      playing: false
     });
   }
 
@@ -42,15 +50,31 @@ export default class ReportViewer extends React.Component {
   onSliderChange = (event) => {
     this.setState({
       currentFrame: parseInt(event.target.value, 10),
-      keepPlaying: false
+      playing: false
+    });
+  }
+
+
+  onSliderMouseDown = () => {
+    this.setState({
+      wasPlayingBeforeSlider: this.state.playing
     });
   }
 
 
   onSliderMouseUp = () => {
     this.setState({
-      keepPlaying: true
-    }, this.play);
+      playing: this.state.wasPlayingBeforeSlider
+    });
+  }
+
+
+  onKeyUp = (event) => {
+    if (event.keyCode === 32) { // spacebar
+      this.setState({
+        playing: !this.state.playing
+      });
+    }
   }
 
 
@@ -64,7 +88,7 @@ export default class ReportViewer extends React.Component {
       currentFrame: frame
     });
 
-    if (state.keepPlaying) {
+    if (state.playing) {
       setTimeout(this.play, 50);
     }
   }
@@ -75,12 +99,8 @@ export default class ReportViewer extends React.Component {
       event.preventDefault();
       event.stopPropagation();
       this.setState({
-        keepPlaying: !this.state.keepPlaying
-      }, function () {
-        if (this.state.keepPlaying) {
-          this.play();
-        }
-      }.bind(this));
+        playing: !this.state.playing
+      });
     }
   }
 
@@ -91,7 +111,8 @@ export default class ReportViewer extends React.Component {
         currentFrame = this.state.currentFrame || 0;
 
     return (
-      <div className="canvas-wrapper">
+      <div className="canvas-wrapper"
+        onKeyUp={this.onKeyUp}>
         <ReportCanvas report={report} frame={currentFrame}/>
 
         <div className="control-box">
@@ -101,6 +122,7 @@ export default class ReportViewer extends React.Component {
             max={numberOfFrames}
             value={currentFrame}
             onChange={this.onSliderChange}
+            onMouseDown={this.onSliderMouseDown}
             onMouseUp={this.onSliderMouseUp} />
 
           <ReportLogs className="report-logs"
