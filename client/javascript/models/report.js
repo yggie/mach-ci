@@ -32,7 +32,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[CREATE\] (?:Body|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
+      match = line.match(/\[CREATE\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);
@@ -51,7 +51,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[UPDATE\] (?:Body|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+)/);
+      match = line.match(/\[UPDATE\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);
