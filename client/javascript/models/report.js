@@ -32,7 +32,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[CREATE\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
+      match = line.match(/\[NEW\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+), Shape=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);
@@ -42,7 +42,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[UPDATE\] START/);
+      match = line.match(/\[FRAME\] NEW/);
       if (match) {
         if (currentStep !== 0) {
           self._snippets.push(snippet.splice(0, snippet.length - 1).join('\n'));
@@ -51,7 +51,7 @@ export default class Report {
         return;
       }
 
-      match = line.match(/\[UPDATE\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+)/);
+      match = line.match(/\[FRAME\] (?:RigidBody|StaticBody)\[(.+)\]: Pos=(.+), Rot=(.+)/);
       if (match) {
         id = match[1];
         position = utils.parseVector(match[2]);

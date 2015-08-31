@@ -30,8 +30,8 @@ describe('Report model', function () {
   it('records all created bodies', function () {
     let logs = `
       test core::state::tests::with_velocity_test ...
-      [CREATE] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-      [CREATE] RigidBody[2]: Pos=[1.356025, 0, 0.2], Rot=[0.888074, 0, 0.325058, -0.325058], Shape=Cube{ w=1, h=1, d=1 }
+      [NEW] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      [NEW] RigidBody[2]: Pos=[1.356025, 0, 0.2], Rot=[0.888074, 0, 0.325058, -0.325058], Shape=Cube{ w=1, h=1, d=1 }
       ok
     `;
 
@@ -43,7 +43,7 @@ describe('Report model', function () {
   it('records all created static bodies', function () {
     let logs = `
       test core::state::tests::with_velocity_test ...
-      [CREATE] StaticBody[3]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      [NEW] StaticBody[3]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
       ok
     `;
 
@@ -55,12 +55,11 @@ describe('Report model', function () {
   it('records the body states', function () {
     let logs = `
       test core::state::tests::with_velocity_test ...
-      [CREATE] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-      [CREATE] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-      [UPDATE] START step=0.2
-      [UPDATE] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
-      [UPDATE] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0]
-      [UPDATE] END
+      [NEW] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      [NEW] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+      [FRAME] NEW step=0.2
+      [FRAME] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
+      [FRAME] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0]
       ok
     `;
 
@@ -89,10 +88,10 @@ describe('Report model', function () {
   it('stores the number of simulation steps taken', function () {
     let logs = `
       test core::state::tests::with_velocity_test ... [RENDERABLE]
-      [UPDATE] START step=0.2
-      [UPDATE] START step=0.2
-      [UPDATE] START step=0.2
-      [UPDATE] START step=0.2
+      [FRAME] NEW step=0.2
+      [FRAME] NEW step=0.2
+      [FRAME] NEW step=0.2
+      [FRAME] NEW step=0.2
       ok
     `;
     expect(report(logs).numberOfFrames).to.equal(4);
@@ -103,15 +102,13 @@ describe('Report model', function () {
     it('can return the log snippet associated with the state', function () {
       let logs = `
         test core::state::tests::with_velocity_test ...
-        [CREATE] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-        [CREATE] RigidBody[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-        [UPDATE] START step=0.2
-        [UPDATE] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] END
-        [UPDATE] START step=0.2
-        [UPDATE] RigidBody[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] RigidBody[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] END
+        [NEW] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [NEW] RigidBody[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [FRAME] NEW step=0.2
+        [FRAME] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
+        [FRAME] NEW step=0.2
+        [FRAME] RigidBody[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
+        [FRAME] RigidBody[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
         ok
       `;
 
@@ -119,16 +116,14 @@ describe('Report model', function () {
       expect(myReport.numberOfFrames).to.equal(2);
       expect(myReport.snippets().map(trim)).to.deep.equal([`
         test core::state::tests::with_velocity_test ...
-        [CREATE] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-        [CREATE] RigidBody[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
-        [UPDATE] START step=0.2
-        [UPDATE] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] END
+        [NEW] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [NEW] RigidBody[2]: Pos=[0, 0.1, 0], Rot=[1, 0, 0, 0], Shape=Cube{ w=1, h=1, d=1 }
+        [FRAME] NEW step=0.2
+        [FRAME] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
       `, `
-        [UPDATE] START step=0.2
-        [UPDATE] RigidBody[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] RigidBody[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
-        [UPDATE] END
+        [FRAME] NEW step=0.2
+        [FRAME] RigidBody[1]: Pos=[-0.278571, 1, 0], Rot=[1, 0, 0, 0]
+        [FRAME] RigidBody[2]: Pos=[0, 1.2, 0], Rot=[1, 0, 0, 0]
         ok
       `].map(trim));
     });
