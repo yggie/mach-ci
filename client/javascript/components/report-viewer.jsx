@@ -62,8 +62,8 @@ export default class ReportViewer extends React.Component {
     let state = this.state;
     let wasPlaying = (state.sliderActive) ? state.wasPlayingBeforeSlider : state.playing;
 
+    this.setFrame(parseInt(event.target.value, 10));
     this.setState({
-      currentFrame: parseInt(event.target.value, 10),
       wasPlayingBeforeSlider: wasPlaying,
       sliderActive: true,
       playing: false
@@ -153,7 +153,7 @@ export default class ReportViewer extends React.Component {
           <input className="canvas-slider"
             type="range"
             min="0"
-            max={numberOfFrames}
+            max={numberOfFrames - 1}
             value={currentFrame}
             onChange={this.onSliderChange}
             onMouseUp={this.onSliderMouseUp} />

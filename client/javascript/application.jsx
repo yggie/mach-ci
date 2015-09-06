@@ -11,14 +11,7 @@ export default class Application extends React.Component {
   constructor() {
     super();
 
-    let logsElement = document.getElementById('logs'),
-        logs = '';
-
-    if (logsElement) {
-      logs = logsElement.innerText || '';
-    }
-
-    this.state = this.stateWithLogs(logs);
+    this.state = this.stateWithLogs('');
   }
 
 
@@ -37,7 +30,7 @@ export default class Application extends React.Component {
     var self = this;
 
     $.ajax({
-      url: '/sample-31-08-2015.log',
+      url: '/default.log',
       success: function (newLogs) {
         self.setState({
           logs: newLogs

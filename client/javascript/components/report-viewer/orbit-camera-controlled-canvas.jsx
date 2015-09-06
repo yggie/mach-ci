@@ -7,13 +7,17 @@ export default class OrbitCameraControlledCanvas extends React.Component {
   useCamera(camera) {
     this._camera = camera;
     this._center = new THREE.Vector3(0.0, 0.0, 0.0);
-    this._up = new THREE.Vector3(0.0, 1.0, 0.0);
-    this._eye = new THREE.Vector3(0.0, 0.0, 5.0);
-    this._zView = (new THREE.Vector3().copy(this._eye).sub(this._center)).normalize();
+    this._up = new THREE.Vector3(0.0, 0.0, 1.0);
 
-    this._zoom = this._eye.length();
-
+    let eye = camera.position.clone();
+    this._zoom = eye.length();
+    this._zView = (new THREE.Vector3().copy(eye).sub(this._center)).normalize();
     this._rotAnchor = null;
+
+    this._defaultCameraEye = camera.position.clone();
+    this._defaultCameraCenter = this._center.clone();
+
+    this.updateCamera();
   }
 
 
@@ -57,12 +61,24 @@ export default class OrbitCameraControlledCanvas extends React.Component {
     this.setState({
       canvas: React.findDOMNode(this.refs.canvas)
     });
+
+    this.useCamera(this.props.camera);
   }
 
 
   componentWillReceiveProps(nextProps) {
     if (this.props.camera !== nextProps.camera || this.props.className !== nextProps.className) {
       this.useCamera(nextProps.camera);
+    }
+  }
+
+
+  canvasOnKeyDown = (event) => {
+    if (event.keyCode === 190 /* “.” */) {
+      this._center.copy(this._defaultCameraCenter);
+      this._zView = (new THREE.Vector3().copy(this._defaultCameraEye).sub(this._center)).normalize();
+
+      this.updateCamera();
     }
   }
 
@@ -131,6 +147,7 @@ export default class OrbitCameraControlledCanvas extends React.Component {
         onMouseLeave={this.canvasOnMouseLeave}
         onMouseUp={this.canvasOnMouseUp}
         onMouseMove={this.canvasOnMouseMove}
+        onKeyDown={this.canvasOnKeyDown}
         onWheel={this.canvasOnWheel}>
       </canvas>
     );

@@ -15,7 +15,7 @@ export default class ReportLogs extends React.Component {
 
     return (
       <pre className={this.props.className}>
-        Frame { this.props.frame } / <br/>
+        Frame { frame + 1 } / { snippets.length }<br/>
         { snippetToRender }
       </pre>
     );

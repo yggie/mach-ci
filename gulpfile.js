@@ -17,6 +17,7 @@
       concat = require('gulp-concat'),
       merge = require('merge-stream'),
       gulpFilter = require('gulp-filter'),
+      inject = require('gulp-inject'),
       path = require('path');
 
 
@@ -25,8 +26,9 @@
           base: path.join(__dirname, '/client'),
           javascript: path.join(__dirname, '/client/javascript'),
           styles: path.join(__dirname, '/client/stylesheets'),
+          public: path.join(__dirname, '/public'),
           dist: path.join(__dirname, '/public/assets'),
-          build: path.join(__dirname, '/mach-ci-offline')
+          build: path.join(__dirname, '/mach-test-browser-standalone/public')
         }
       };
 
@@ -79,14 +81,21 @@
   };
 
 
-  gulp.task('build', function () {
-    var css = gulp.src(config.paths.styles + '/**/*.scss', {
-        base: config.paths.styles
-      })
+  gulp.task('build-assets', function () {
+    return gulp.src([
+      '!' + config.paths['public'] + '/**/application.css*',
+      config.paths['public'] + '/**/*.{css,jpg,svg,eot,otf,ttf,woff,woff2}'
+    ])
+      .pipe(gulp.dest(config.paths.build));
+  });
+
+
+  gulp.task('minify-css-and-js', function () {
+    var css = gulp.src(config.paths.base + '/stylesheets/**/*.scss')
       .pipe(compileSass())
       .pipe(minifyCss());
 
-    var jsx = gulp.src(config.paths.javascript + '/run.jsx', {
+    var jsx = gulp.src(config.paths.base + '/javascript/run.jsx', {
         base: config.paths.base
       })
       .pipe(compileJsx());
@@ -97,6 +106,16 @@
 
     return merge(css, js)
       .pipe(addMinExtension())
+      .pipe(gulp.dest(config.paths.build));
+  });
+
+
+  gulp.task('build', ['minify-css-and-js', 'build-assets'], function () {
+    return gulp.src(config.paths['public'] + '/index.html')
+      .pipe(inject(gulp.src([
+        config.paths.build + '/**/*.js',
+        config.paths.build + '/**/*.css'
+      ], { cwd: config.paths.build + '/' })))
       .pipe(gulp.dest(config.paths.build));
   });
 

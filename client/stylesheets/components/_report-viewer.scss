@@ -14,14 +14,15 @@
   height: 150px;
   color: white;
   overflow: scroll;
+  margin: 0;
 }
 
 .control-box {
+  margin: 0;
   position: absolute;
-  height: 200px;
   width: 500px;
   right: 0;
-  bottom: 0;
+  bottom: 8px;
   z-index: 1;
 }
 
