@@ -18,7 +18,7 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'specs/spec-helper.js',
-      'bower_components/threejs/build/three.js',
+      'bower_components/three.js/build/three.js',
       'bower_components/jquery/dist/jquery.js',
       'bower_components/react/react.js',
       'client/javascript/**/*.jsx',

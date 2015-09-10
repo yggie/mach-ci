@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "cd public/; python -m SimpleHTTPServer 3000",
-    "test": "karma start"
+    "test": "./node_modules/.bin/karma start --browsers PhantomJS --single-run"
   },
   "repository": {
     "type": "git",

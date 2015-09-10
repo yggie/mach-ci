@@ -36,7 +36,7 @@
   var clientDependencies = function () {
     return gulp.src([
       'bower_components/jquery/dist/jquery.js',
-      'bower_components/threejs/build/three.js',
+      'bower_components/three.js/build/three.js',
       'bower_components/react/react.js',
       'bower_components/classnames/index.js'
     ]);
