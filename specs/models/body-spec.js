@@ -5,8 +5,8 @@
 import Body from '../../client/models/body';
 
 describe('Body', function () {
-  let body = function (options) {
-    options = options || {};
+  let body = function (inputOptions) {
+    let options = inputOptions || {};
     return new Body(
         options.id || 'my id',
         options.position || new THREE.Vector3(0, 0, 0),

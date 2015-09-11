@@ -128,7 +128,7 @@
       .pipe(compileSass())
       .on('error', notify.onError())
       .on('error', function () {
-        this.emit('end');
+        this.emit('end'); // eslint-disable-line no-invalid-this
       })
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.paths.dist))

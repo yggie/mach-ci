@@ -1,5 +1,5 @@
 {
-  "name": "mach-ci",
+  "name": "mach-test-browser",
   "version": "0.0.1",
   "description": "Test browser for the mach physics engine",
   "main": "gulpfile.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yggie/mach-ci.git"
+    "url": "https://github.com/yggie/mach-test-browser.git"
   },
   "author": "Bryan Yap",
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/yggie/mach-ci/issues"
+    "url": "https://github.com/yggie/mach-test-browser/issues"
   },
-  "homepage": "https://github.com/yggie/mach-ci",
+  "homepage": "https://github.com/yggie/mach-test-browser",
   "browserify": {
     "transform": [
       "browserify-shim"

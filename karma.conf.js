@@ -17,11 +17,13 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'specs/spec-helper.js',
+      'specs/shims.js',
       'bower_components/three.js/build/three.js',
       'bower_components/jquery/dist/jquery.js',
-      'bower_components/react/react.js',
-      'specs/**/*-spec.js'
+      'bower_components/react/react-with-addons.js',
+      'specs/spec-helper.js',
+      'specs/**/*-spec.js',
+      'specs/**/*-spec.jsx'
     ],
 
 
@@ -34,8 +36,8 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'client/**/*.+{jsx|js}': ['browserify'],
-      'specs/**/*.js': ['browserify']
+      'client/**/*.{jsx,js}': ['browserify'],
+      'specs/**/*.{jsx,js}': ['browserify']
     },
 
 
