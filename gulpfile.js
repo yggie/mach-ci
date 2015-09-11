@@ -141,13 +141,13 @@
         base: config.paths.client
       });
 
-    var filter = gulpFilter(['**/*.jsx']);
+    var filter = gulpFilter(['**/*.jsx'], { restore: true });
 
     return merge(clientDependencies(), jsx)
       .pipe(filter)
         .pipe(compileJsx({ debug: true }))
         .on('error', notify.onError())
-      .pipe(filter.restore())
+      .pipe(filter.restore)
       .pipe(sourcemaps.init())
       .pipe(concat('javascript/application.js'))
       .pipe(sourcemaps.write('.'))
