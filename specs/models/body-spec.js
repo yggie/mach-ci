@@ -11,7 +11,7 @@ describe('Body', function () {
         options.id || 'my id',
         options.position || new THREE.Vector3(0, 0, 0),
         options.rotation || new THREE.Quaternion(0, 0, 0, 1),
-        options.geometry || 'Cube {}'
+        options.geometry || 'Cuboid {}'
     );
   };
 

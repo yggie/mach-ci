@@ -25,7 +25,7 @@ export const parseQuaternion = function (string) {
 export const parseGeometry = function (string) {
   let match = null;
 
-  match = string.match(/Cube{ w=(-?\d+(?:\.\d+)?), h=(-?\d+(?:\.\d+)?), d=(-?\d+(?:\.\d+)?) }/);
+  match = string.match(/Cuboid{ w=(-?\d+(?:\.\d+)?), h=(-?\d+(?:\.\d+)?), d=(-?\d+(?:\.\d+)?) }/);
   if (match) {
     let width = parseFloat(match[1]),
         height = parseFloat(match[2]),

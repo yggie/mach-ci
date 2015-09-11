@@ -20,9 +20,9 @@ describe('utils module', function () {
       .deep.equal(new THREE.Quaternion(-1, 4.3, 2.1, 1));
   });
 
-  it('can parse a stringified Cube shape into a THREE.BoxGeometry', function () {
+  it('can parse a stringified Cuboid shape into a THREE.BoxGeometry', function () {
     let expected = new THREE.BoxGeometry(1, 2.2, -3.3),
-        geometry = utils.parseGeometry('Cube{ w=1, h=2.2, d=-3.3 }');
+        geometry = utils.parseGeometry('Cuboid{ w=1, h=2.2, d=-3.3 }');
 
     expect(geometry).to.be.an.instanceof(THREE.BoxGeometry);
     expect(geometry.width).to.equal(expected.width);
