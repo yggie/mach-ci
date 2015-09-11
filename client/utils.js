@@ -25,13 +25,16 @@ export const parseQuaternion = function (string) {
 export const parseGeometry = function (string) {
   let match = null;
 
-  match = string.match(/Cuboid{ w=(-?\d+(?:\.\d+)?), h=(-?\d+(?:\.\d+)?), d=(-?\d+(?:\.\d+)?) }/);
-  if (match) {
+  if (match = string.match(/Cuboid{ w=(-?\d+(?:\.\d+)?), h=(-?\d+(?:\.\d+)?), d=(-?\d+(?:\.\d+)?) }/)) {
     let width = parseFloat(match[1]),
         height = parseFloat(match[2]),
         depth = parseFloat(match[3]);
 
     return new THREE.BoxGeometry(width, height, depth);
+  } else if (match = string.match(/Sphere{(-?\d+(?:\.\d+)?)}/)) {
+    let radius = parseFloat(match[1]);
+
+    return new THREE.SphereGeometry(radius);
   }
 
   throw 'Unable to parse shape from string: "' + string + '"';

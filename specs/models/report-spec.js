@@ -57,7 +57,7 @@ describe('Report model', function () {
     it('records all created static bodies', function () {
       let logs = `
         test core::state::tests::with_velocity_test ...
-        [NEW] StaticBody[3]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cuboid{ w=1, h=1, d=1 }
+        [NEW] StaticBody[3]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Sphere{1}
         ok
       `;
 
@@ -70,7 +70,7 @@ describe('Report model', function () {
       let logs = `
         test core::state::tests::with_velocity_test ...
         [NEW] RigidBody[1]: Pos=[0, 0, 0], Rot=[1, 0, 0, 0], Shape=Cuboid{ w=1, h=1, d=1 }
-        [NEW] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0], Shape=Cuboid{ w=1, h=1, d=1 }
+        [NEW] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0], Shape=Sphere{2}
         [FRAME] NEW step=0.2
         [FRAME] RigidBody[1]: Pos=[-0.178571, 0, 0], Rot=[1, 0, 0, 0]
         [FRAME] StaticBody[2]: Pos=[0, 1, 0], Rot=[1, 0, 0, 0]
