@@ -2,7 +2,7 @@
 
 'use strict';
 
-import * as utils from '../client/javascript/utils';
+import * as utils from '../client/utils';
 
 describe('utils module', function () {
   it('can convert a stringified array to a numeric array', function () {

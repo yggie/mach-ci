@@ -2,7 +2,7 @@
 
 'use strict';
 
-import Body from '../../client/javascript/models/body';
+import Body from '../../client/models/body';
 
 describe('Body', function () {
   let body = function (options) {

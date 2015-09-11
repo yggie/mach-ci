@@ -1,6 +1,6 @@
 'use strict';
 
-import Report from '../../client/javascript/models/report';
+import Report from '../../client/models/report';
 
 describe('Report model', function () {
   let report = function (logs) {

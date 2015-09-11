@@ -1,6 +1,6 @@
 'use strict';
 
-import parseLogs from '../client/javascript/parse-logs';
+import parseLogs from '../client/parse-logs';
 
 describe('parseLogs', function () {
   let logs = function () {

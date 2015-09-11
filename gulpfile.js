@@ -23,9 +23,9 @@
 
   var config = {
         paths: {
-          base: path.join(__dirname, '/client'),
-          javascript: path.join(__dirname, '/client/javascript'),
-          styles: path.join(__dirname, '/client/stylesheets'),
+          client: path.join(__dirname, '/client'),
+          javascript: path.join(__dirname, '/client'),
+          styles: path.join(__dirname, '/client/styles'),
           public: path.join(__dirname, '/public'),
           dist: path.join(__dirname, '/public/assets'),
           build: path.join(__dirname, '/mach-test-browser-standalone/public')
@@ -91,12 +91,12 @@
 
 
   gulp.task('minify-css-and-js', function () {
-    var css = gulp.src(config.paths.base + '/stylesheets/**/*.scss')
+    var css = gulp.src(config.paths.client + '/stylesheets/**/*.scss')
       .pipe(compileSass())
       .pipe(minifyCss());
 
-    var jsx = gulp.src(config.paths.base + '/javascript/run.jsx', {
-        base: config.paths.base
+    var jsx = gulp.src(config.paths.client + '/run.jsx', {
+        base: config.paths.client
       })
       .pipe(compileJsx());
 
@@ -122,7 +122,7 @@
 
   gulp.task('compile-sass', function () {
     return gulp.src(config.paths.styles + '/**/*.scss', {
-        base: config.paths.base
+        base: config.paths.client
       })
       .pipe(sourcemaps.init())
       .pipe(compileSass())
@@ -137,8 +137,8 @@
 
 
   gulp.task('compile-jsx', function () {
-    var jsx = gulp.src(config.paths.javascript + '/run.jsx', {
-        base: config.paths.base
+    var jsx = gulp.src(config.paths.client + '/run.jsx', {
+        base: config.paths.client
       });
 
     var filter = gulpFilter(['**/*.jsx']);
