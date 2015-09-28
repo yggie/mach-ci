@@ -71,17 +71,7 @@ export default class ReportCanvas extends React.Component {
       let scene = this.state.scene,
           reportEntity = this.state.reportEntity;
 
-      reportEntity.bodies.forEach(function (body) {
-        scene.remove(body.mesh);
-      });
-
-      reportEntity.pointClouds().forEach(function (pointCloud) {
-        scene.remove(pointCloud.threeObjectAt(props.frame));
-      });
-
-      reportEntity.triangleMeshes().forEach(function (triangleMesh) {
-        scene.remove(triangleMesh.threeObjectAt(props.frame));
-      });
+      reportEntity.cleanup(scene);
 
       this.setState({
         reportEntity: new ReportEntity(nextProps.report, environment)
@@ -89,17 +79,7 @@ export default class ReportCanvas extends React.Component {
     }
 
     if (nextProps.frame !== props.frame) {
-      let reportEntity = this.state.reportEntity;
-
-      reportEntity.triangleMeshes().forEach(function (triangleMesh) {
-        scene.remove(triangleMesh.threeObjectAt(props.frame));
-      });
-
-      this.state.reportEntity.setFrame(nextProps.frame);
-
-      reportEntity.triangleMeshes().forEach(function (triangleMesh) {
-        scene.add(triangleMesh.threeObjectAt(nextProps.frame));
-      });
+      this.state.reportEntity.setFrame(nextProps.frame, this.state.scene);
     }
   }
 
@@ -119,20 +99,8 @@ export default class ReportCanvas extends React.Component {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.autoClear = false;
 
-    reportEntity.bodies.forEach(function (body) {
-      scene.add(body.mesh);
-    });
-
-    let frame = this.props.frame;
-    reportEntity.pointClouds().forEach(function (pointCloud) {
-      scene.add(pointCloud.threeObjectAt(frame));
-    });
-
-    let environment = this.state.environment;
-    reportEntity.triangleMeshes().forEach(function (triangleMesh) {
-      triangleMesh.setEnvironment(environment);
-      scene.add(triangleMesh.threeObjectAt(frame));
-    });
+    reportEntity.initialize(scene);
+    reportEntity.setFrame(this.props.frame, scene);
   }
 
 

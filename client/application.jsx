@@ -31,7 +31,8 @@ export default class Application extends React.Component {
 
     $.ajax({
       url: '/default.log',
-      success: function (newLogs) {
+      success: function (newLogs, status, request) {
+        console.log(request.getResponseHeader('Last-Modified'));
         self.setState({
           logs: newLogs
         });

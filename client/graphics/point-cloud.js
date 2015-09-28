@@ -8,8 +8,8 @@ export default class PointCloud {
     this._geometries = [];
     this._threeObjects = [];
     this._material = new THREE.PointCloudMaterial({
-      color: '#ffffff',
-      size: 0.1
+      color: '#ff0000',
+      size: 0.5
     });
   }
 

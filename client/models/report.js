@@ -2,6 +2,7 @@
 
 import * as utils from '../utils';
 import Body from './body';
+import Contact from './contact';
 import PointCloud from '../graphics/point-cloud';
 import TriangleMesh from '../graphics/triangle-mesh';
 
@@ -13,6 +14,7 @@ export default class Report {
     self._snippets = [];
     self._pointClouds = {};
     self._triangleMeshes = {};
+    self._contacts = [];
 
     let currentStep = 0,
         snippet = [];
@@ -64,6 +66,12 @@ export default class Report {
 
         let triangleMesh = self.findOrCreateTriangleMesh(id);
         triangleMesh.addFaceAtFrame([point0, point1, point2], currentStep);
+      } else if (match = line.match(/\[FRAME\] Contact: Center=(.+), Normal=(.+)/)) {
+        let center = utils.parseVector(match[1]);
+        let normal = utils.parseVector(match[2]);
+
+        let contact = new Contact(center, normal);
+        self.addContact(contact, currentStep);
       }
     });
 
@@ -99,6 +107,11 @@ export default class Report {
   }
 
 
+  contacts() {
+    return this._contacts;
+  }
+
+
   pointClouds() {
     let self = this;
 
@@ -116,12 +129,16 @@ export default class Report {
     });
   }
 
-
   findOrCreatePointCloud(id) {
     return this._pointClouds[id] || (this._pointClouds[id] = new PointCloud(id));
   }
 
   findOrCreateTriangleMesh(id) {
     return this._triangleMeshes[id] || (this._triangleMeshes[id] = new TriangleMesh(id));
+  }
+
+  addContact(contact, frame) {
+    this._contacts[frame] = this._contacts[frame] || [];
+    this._contacts[frame].push(contact);
   }
 }

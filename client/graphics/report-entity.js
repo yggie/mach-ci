@@ -14,7 +14,9 @@ class BodyEntity {
     this.material = new THREE.MeshLambertMaterial({
       color: options.color,
       envMap: options.envMap,
-      reflectivity: 0.5
+      reflectivity: 0.5,
+      transparent: true,
+      opacity: 0.7
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
@@ -39,9 +41,15 @@ class BodyEntity {
 export default class ReportEntity {
   constructor(report, environment) {
     this._report = report;
+    this._contacts = [];
     this.bodies = [];
     this.currentFrame = 0;
     this.numberOfFrames = report ? report.numberOfFrames : 0;
+
+    this._contactMaterial = new THREE.PointCloudMaterial({
+      color: '#ff0',
+      size: 0.1
+    });
 
     let colors = new ColorGenerator();
 
@@ -56,6 +64,17 @@ export default class ReportEntity {
           envMap: environment.envMap()
         }));
       }
+
+      report.contacts().forEach(function (contactsInFrame, frame) {
+        console.log(frame);
+        if (contactsInFrame.length) {
+          let geometry = new THREE.Geometry();
+          contactsInFrame.forEach(function (contact) {
+            geometry.vertices.push(contact.center().clone());
+          });
+          this._contacts[frame] = new THREE.PointCloud(geometry, this._contactMaterial);
+        }
+      }.bind(this));
     }
 
     this.canRender = true;
@@ -82,15 +101,79 @@ export default class ReportEntity {
   }
 
 
-  setFrame(index) {
-    let bodies = this.bodies,
-        length = bodies.length;
+  initialize(scene) {
+    let currentFrame = this.currentFrame;
+    this.bodies.forEach(function (body) {
+      scene.add(body.mesh);
+    });
+    this.pointClouds().forEach(function (pointCloud) {
+      scene.add(pointCloud.threeObjectAt(currentFrame));
+    });
+    this.triangleMeshes().forEach(function (triangleMesh) {
+      scene.add(triangleMesh.threeObjectAt(currentFrame));
+    });
 
-    this.currentFrame = index;
+    let contactsInFrame = this._contacts[currentFrame];
+    console.log(currentFrame, contactsInFrame, this._contacts);
+    if (contactsInFrame) {
+      scene.add(contactsInFrame);
+    }
+  }
+
+
+  cleanup(scene) {
+    let currentFrame = this.currentFrame;
+    this.bodies.forEach(function (body) {
+      scene.remove(body.mesh);
+    });
+
+    this.pointClouds().forEach(function (pointCloud) {
+      scene.remove(pointCloud.threeObjectAt(currentFrame));
+    });
+
+    this.triangleMeshes().forEach(function (triangleMesh) {
+      scene.remove(triangleMesh.threeObjectAt(currentFrame));
+    });
+
+    let contactsInFrame = this._contacts[currentFrame];
+    if (contactsInFrame) {
+      scene.remove(contactsInFrame);
+    }
+  }
+
+
+  setFrame(frame, scene) {
+    let bodies = this.bodies,
+        length = bodies.length,
+        currentFrame = this.currentFrame;
+
+    this.pointClouds().forEach(function (pointCloud) {
+      scene.remove(pointCloud.threeObjectAt(currentFrame));
+    });
+    this.triangleMeshes().forEach(function (triangleMesh) {
+      scene.remove(triangleMesh.threeObjectAt(currentFrame));
+    });
+    let contactsInFrame = this._contacts[currentFrame];
+    if (contactsInFrame) {
+      scene.remove(contactsInFrame);
+    }
+
+    this.currentFrame = frame;
     for (let i = 0; i < length; i++) {
       let body = bodies[i];
 
-      body.useState(index);
+      body.useState(frame);
+    }
+
+    this.pointClouds().forEach(function (pointCloud) {
+      scene.add(pointCloud.threeObjectAt(frame));
+    });
+    this.triangleMeshes().forEach(function (triangleMesh) {
+      scene.add(triangleMesh.threeObjectAt(frame));
+    });
+    let newContactsInFrame = this._contacts[frame];
+    if (newContactsInFrame) {
+      scene.add(newContactsInFrame);
     }
   }
 }
